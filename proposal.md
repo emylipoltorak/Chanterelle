@@ -173,17 +173,17 @@ After that I will clean up the styling as necessary.
 Beyond MVP:
 -----------
 
-*If you've done a task before, it will pop up as a suggestion when typing.
-*Allow users to choose a color scheme and save their preference.
-*Cool mushroom/mycelium themed styling on the graphs.
-*(with weights) An algorithm proposes an ideal order for your tasks.
-*(with weights) Task times can be marked "active" or "inactive", allowing other work to be 
+*  If you've done a task before, it will pop up as a suggestion when typing.
+*  Allow users to choose a color scheme and save their preference.
+*  Cool mushroom/mycelium themed styling on the graphs.
+*  (with weights) An algorithm proposes an ideal order for your tasks.
+*  (with weights) Task times can be marked "active" or "inactive", allowing other work to be 
 done while, for instance, code is compiling or bread rising.
-*(with weights) optimized paths are generated for multiple people working on the same project.
-*Tasks have an optional "active mode" that times how long they take, saving the times to the
+*  (with weights) optimized paths are generated for multiple people working on the same project.
+*  Tasks have an optional "active mode" that times how long they take, saving the times to the
 database to be used as weights in the future. If "active mode" is used on the same task 
 multiple times, either mode or mean value will be used. (Further research needed.)
-*(weights) different types of weights can be entered (how long it will take, how difficult 
+*  (weights) different types of weights can be entered (how long it will take, how difficult 
 the user finds it, how resistant the user is to the task), and an algorithm presents task in
 an order that will help the user complete their work flow with reduced anxiety. 
 
