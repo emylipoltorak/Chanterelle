@@ -289,8 +289,11 @@ def edge_factory(node_model, child_to_field = "id", parent_to_field = "id", conc
         parent = models.ForeignKey(node_model, related_name = "%s_child" % node_model_name, to_field = parent_to_field, on_delete=models.CASCADE)
         child = models.ForeignKey(node_model, related_name = "%s_parent" % node_model_name, to_field = child_to_field, on_delete=models.CASCADE)
 
-        def __unicode__(self):
-            return u"%s is child of %s" % (self.child, self.parent)
+        def __str__(self):
+            return '{} --> {}'.format(self.parent.name, self.child.name)
+
+        def __repr__(self):
+            return '{} --> {}'.format(self.parent.id, self.child.id)
 
         def save(self, *args, **kwargs):
             if not kwargs.pop('disable_circular_check', False):
