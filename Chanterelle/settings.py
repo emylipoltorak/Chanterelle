@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
-    'webpack_loader'
+    'webpack_loader',
+    'django_dag.apps.DjangoDagConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'api', 'static'),
 )
 
 WEBPACK_LOADER = {
