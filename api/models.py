@@ -1,11 +1,14 @@
 from django.db import models
 from django_dag.models import node_factory, edge_factory
+from django.contrib.auth.models import User
 
 
 class TaskNode(node_factory('TaskEdge')):
     name = models.CharField(max_length=32)
     in_degree = models.IntegerField(editable=False, null=True)
-    graph = models.ForeignKey('DiGraph', null=True, blank=True, on_delete=models.CASCADE)
+    out_degree = models.IntegerField(editable=False, null=True)
+    graph = models.ForeignKey('DiGraph', related_name='nodes', null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Tasks'
@@ -13,6 +16,7 @@ class TaskNode(node_factory('TaskEdge')):
     def save(self):
         super(TaskNode, self).save()
         self.in_degree = len(self.ancestors_set())
+        self.out_degree = len(self.descendants_set())
         super(TaskNode, self).save()
 
     def __str__(self):
@@ -26,9 +30,14 @@ class TaskEdge(edge_factory(TaskNode, concrete=False)):
     class Meta:
         verbose_name_plural = 'Dependencies'
 
+    def save(self):
+        super(TaskEdge, self).save()
+        self.graph = self.parent.graph
+        super(TaskEdge, self).save()
 
 class DiGraph(models.Model):
     name = models.CharField(max_length=32)
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Workflow graphs'
@@ -49,6 +58,10 @@ class DiGraph(models.Model):
     def edges(self):
         # return a queryset of TaskEdge objects
         return TaskEdge.objects.filter(parent__graph=self)
+
+    def next(self):
+        # returns a queryset of TaskNode objects with and in degree of 0.
+        return self.nodes().filter(in_degree=0)
 
     def add_node(self, node):
         # if node is a TaskNode instance, this will add node to the graph.
@@ -100,10 +113,11 @@ class DiGraph(models.Model):
         b.save()
         for i in a.ancestors_set():
             if b in i.descendants_set():
-                # imagine we have a method remove_edge(a,b)
                 self.remove_edge(i, b)
                 i.save()
                 b.save()
 
     def __str__(self):
         return self.name
+
+# TODO Tuesday: Next, topological sort, User classes. After: start building API!
