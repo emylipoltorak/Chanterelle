@@ -19,5 +19,6 @@ from api import views as a_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', a_views.home, name='home')
+    path('', a_views.home, name='home'),
+    path('api/', a_views.DiGraphList.as_view())
 ]

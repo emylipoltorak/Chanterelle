@@ -4,7 +4,7 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     context: __dirname,
-    entry: './assets/js/index',
+    entry: './assets/js/index.js',
 
     output: {
         //where you want your compiled bundle to be stored
@@ -33,5 +33,7 @@ module.exports = {
 
     resolve: {
         extensions: ['.js', '.jsx']
-    }
+    },
+
+    watch: true
 };

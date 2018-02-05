@@ -119,5 +119,3 @@ class DiGraph(models.Model):
 
     def __str__(self):
         return self.name
-
-# TODO Tuesday: Next, topological sort, User classes. After: start building API!

@@ -1,3 +1,19 @@
-body {
-  background-color: aquamarine;
+#root {
+  text-align: center;
+}
+
+#cy {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.addBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 15%;
 }

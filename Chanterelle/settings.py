@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'webpack_loader',
     'django_dag.apps.DjangoDagConfig',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,3 +136,7 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
     }
 }
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080'
+)

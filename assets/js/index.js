@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import CyContainer from './cy_elements';
+import AddBox from './add_box';
 
 class App extends Component {
   render () {
-    return <h1>Hello World I changed something</h1>
+    return (
+        <div>
+          <CyContainer />
+          <AddBox />
+        </div>
+      )
   }
 }
 
