@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import axios from 'axios';
 
 cytoscape.use( dagre );
 
@@ -19,7 +18,6 @@ const cyConfig = {
         'border-width': '3px',
         'border-style': 'double',
         'border-color': 'black',
-        'border-opacity': '10%',
         'width': '80px',
       }
     }, {
@@ -33,25 +31,30 @@ const cyConfig = {
 };
 
 export default class CyContainer extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {cy: {}}
+
+  }
+
   componentDidMount () {
     cyConfig.container = this.refs.cy;
-    let cy = cytoscape(cyConfig);
+    this.setState({cy: cytoscape(cyConfig)})
+  }
 
-    axios.get('http://localhost:8000/api')
-    .then(function (result) {
-      const graph = result.data[0];
-      console.log(graph);
-      graph.nodes.forEach(node => {
-        cy.add({
+  componentWillReceiveProps (nextProps) {
+    if (this.props.graph !== nextProps.graph) {
+      nextProps.graph.nodes.forEach(node => {
+        this.state.cy.add({
           data: {
             id: node.id,
-            name: node.name,
-            width: name.length *10 + 'px'
+            name: node.name
           }
         })
       });
-      graph.edges.forEach(edge => {
-        cy.add({
+
+      nextProps.graph.edges.forEach(edge => {
+        this.state.cy.add({
           data: {
             id: edge.id,
             source: edge.parent.id,
@@ -59,13 +62,11 @@ export default class CyContainer extends Component {
           }
         })
       });
-      cy.layout({
+
+      this.state.cy.layout({
         name: 'dagre'
       }).run();
-    }).catch(function (error) {
-      console.log(error)
-  });
-
+    }
   }
 
   render () {

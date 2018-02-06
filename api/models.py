@@ -13,7 +13,7 @@ class TaskNode(node_factory('TaskEdge')):
     class Meta:
         verbose_name_plural = 'Tasks'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super(TaskNode, self).save()
         self.in_degree = len(self.ancestors_set())
         self.out_degree = len(self.descendants_set())
@@ -30,10 +30,11 @@ class TaskEdge(edge_factory(TaskNode, concrete=False)):
     class Meta:
         verbose_name_plural = 'Dependencies'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         super(TaskEdge, self).save()
         self.graph = self.parent.graph
         super(TaskEdge, self).save()
+
 
 class DiGraph(models.Model):
     name = models.CharField(max_length=32)
@@ -51,9 +52,9 @@ class DiGraph(models.Model):
             e.save()
         super(DiGraph, self).save()
 
-    def nodes(self):
-        # return a queryset of TaskNode objects
-        return TaskNode.objects.filter(graph=self)
+    # def nodes(self):
+    #     # return a queryset of TaskNode objects
+    #     return TaskNode.objects.filter(graph=self)
 
     def edges(self):
         # return a queryset of TaskEdge objects

@@ -1,19 +1,27 @@
-#root {
+body {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 30px 1fr;
+  grid-template-areas: 'header header header header'
+                       'addbox graph graph graph';
+}
+
+.header {
+  grid-area: header;
   text-align: center;
 }
 
+.addBox {
+  text-align: center;
+  grid-area: addbox;
+  display: flex;
+  flex-direction: column;
+}
+
 #cy {
+  grid-area: graph;
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-}
-
-.addBox {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-width: 15%;
+  z-index: -1;
 }

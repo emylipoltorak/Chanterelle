@@ -1,1 +1,1 @@
-{"status":"done","chunks":{"main":[{"name":"main-db12a7195745d6835065.js","path":"/Users/emylipoltorak/Projects/Chanterelle/assets/bundles/main-db12a7195745d6835065.js"}]}}
+{"status":"done","chunks":{"main":[{"name":"main-757d10d677d930377ee5.js","path":"/Users/emylipoltorak/Projects/Chanterelle/assets/bundles/main-757d10d677d930377ee5.js"}]},"error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve 'js-cookies' in '/Users/emylipoltorak/Projects/Chanterelle/assets/js'"}
