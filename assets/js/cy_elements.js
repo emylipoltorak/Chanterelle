@@ -11,20 +11,25 @@ const cyConfig = {
       selector: 'node',
       style: {
         'label': 'data(name)',
+        'color': 'rgba(37, 30, 34, 0.8)',
         'text-valign':'center',
         'text-halign': 'center',
         'shape': 'cutrectangle',
         'background-color': 'white',
         'border-width': '3px',
         'border-style': 'double',
-        'border-color': 'black',
+        'border-color': 'rgba(37, 30, 34, 0.8)',
         'width': '80px',
       }
     }, {
       selector: 'edge',
       style: {
         'curve-style': 'bezier',
-        'target-arrow-shape': 'triangle'
+        'target-arrow-shape': 'triangle-cross',
+        'target-arrow-fill': 'hollow',
+        'target-arrow-color': 'rgba(37, 30, 34, 0.8)',
+        'width': '1px',
+        'line-color': 'rgba(37, 30, 34, 0.8)'
       }
     }
   ]
@@ -44,6 +49,7 @@ export default class CyContainer extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (this.props.graph !== nextProps.graph) {
+      this.state.cy.remove('*');
       nextProps.graph.nodes.forEach(node => {
         this.state.cy.add({
           data: {
@@ -63,6 +69,8 @@ export default class CyContainer extends Component {
         })
       });
 
+      this.state.cy.elements('[name="root"]').remove();
+      this.state.cy.elements('[name="end"]').remove();
       this.state.cy.layout({
         name: 'dagre'
       }).run();

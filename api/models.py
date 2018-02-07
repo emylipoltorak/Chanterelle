@@ -62,7 +62,7 @@ class DiGraph(models.Model):
 
     def next(self):
         # returns a queryset of TaskNode objects with and in degree of 0.
-        return self.nodes().filter(in_degree=0)
+        return self.nodes.all().filter(in_degree=0)
 
     def add_node(self, node):
         # if node is a TaskNode instance, this will add node to the graph.
@@ -87,7 +87,7 @@ class DiGraph(models.Model):
         # removes node from the graph while maintaining dependencies between
         # the node's parents and children.
 
-        if node in self.nodes():
+        if node in self.nodes.all():
 
             for p in node.parents():
                 for c in node.children.all():
@@ -101,22 +101,31 @@ class DiGraph(models.Model):
 
     def remove_edge(self, a, b):
         # assume that a and b are nodes on this graph and there exists an edge a --> b
+        print('remove edge ran')
         for u in self.edges():
             if u.parent == a and u.child == b:
+                print('the edge exists')
                 u.delete()
                 a.save()
                 b.save()
+                print('the edge was deleted')
 
     def add_edge(self, a, b):
         # assuming that a and b are nodes on this graph, add an edge a --> b
-        a.add_child(b)
-        a.save()
-        b.save()
-        for i in a.ancestors_set():
-            if b in i.descendants_set():
-                self.remove_edge(i, b)
-                i.save()
-                b.save()
+        if not a in b.ancestors_set():
+            a.add_child(b)
+            print('an edge was created')
+            a.save()
+            b.save()
+            for i in a.ancestors_set():
+                if b in i.descendants_set():
+                    print('The edge {}, {} should be removed'.format(i,b))
+                    self.remove_edge(i, b)
+                    i.save()
+                    b.save()
+                    print('The edge {}, {} was removed.'.format(i,b))
+        else:
+            print('{} is already an ancestor of {}'.format(a,b))
 
     def __str__(self):
         return self.name

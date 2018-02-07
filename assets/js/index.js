@@ -7,7 +7,8 @@ import axios from 'axios';
 class App extends Component {
   constructor (props) {
     super(props);
-    this.state = {graph: {}}
+    this.state = {graph: {}};
+    this.LoadGraph = this.LoadGraph.bind(this)
   }
 
   componentDidMount() {
@@ -15,6 +16,7 @@ class App extends Component {
   }
 
   LoadGraph () {
+    console.log('LoadGraph() ran');
     axios.get('http://localhost:8000/api')
       .then(result => {
         this.setState({graph: result.data[1]})
@@ -25,9 +27,13 @@ class App extends Component {
 
   render () {
     return (
-        <div>
+        <div className='app'>
+          <header>
+            <h1>Chanterelle</h1>
+            <h2>{this.state.graph.name}</h2>
+          </header>
           <CyContainer graph={this.state.graph} />
-          <AddBox graph={this.state.graph} />
+          <AddBox graph={this.state.graph} LoadGraph={this.LoadGraph}/>
         </div>
       )
   }

@@ -8,7 +8,8 @@ export default class AddBox extends Component {
 
   constructor (props) {
     super (props);
-    this.AddNode = this.AddNode.bind(this)
+    this.AddNode = this.AddNode.bind(this);
+    this.AddEdge = this.AddEdge.bind(this);
   }
 
   AddNode () {
@@ -20,7 +21,25 @@ export default class AddBox extends Component {
       headers: {"X-CSRFToken": csrfToken}
     })
       .then(response => {
-        console.log(response.config.data)
+        console.log(response.config.data);
+        this.props.LoadGraph()
+      }).catch(error => {
+        console.log(error)
+    })
+  }
+
+  AddEdge () {
+    const source = document.getElementById('addEdgeSource').value;
+    const target = document.getElementById('addEdgeTarget').value;
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/add-edge/',
+      data:{parent: source, child: target, graph: this.props.graph.id},
+      headers: {"X-CSRFToken": csrfToken}
+    })
+      .then(response => {
+        console.log(response.config.data);
+        this.props.LoadGraph()
       }).catch(error => {
         console.log(error)
     })
@@ -38,7 +57,7 @@ export default class AddBox extends Component {
         <input type='text' id='addEdgeSource' />
         <h3>Target:</h3>
         <input type='text' id='addEdgeTarget' />
-        <button id='addEdgeButton'>Add</button>
+        <button id='addEdgeButton' onClick={this.AddEdge}>Add</button>
       </div>
     )
   }
