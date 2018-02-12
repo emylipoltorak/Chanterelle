@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="{% static 'api/img/favicon.ico' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'api/css/jquery.qtip.css' %}">
   <link rel="stylesheet" href="{% static 'api/css/style.css' %}">
   <meta charset="UTF-8">
   <title>Chanterelle</title>
@@ -11,6 +13,7 @@
 <body>
   {% csrf_token %}
   <div id="root"></div>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   {% render_bundle 'main' %}
 </body>
 </html>

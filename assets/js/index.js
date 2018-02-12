@@ -1,42 +1,18 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import CyContainer from './cy_elements';
-import AddBox from './add_box';
-import axios from 'axios';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import NextList from './views/next-list.js';
+import Graph from './views/graph-builder.js';
+import LogIn from './views/login.js';
 
-class App extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {graph: {}};
-    this.LoadGraph = this.LoadGraph.bind(this)
-  }
 
-  componentDidMount() {
-    this.LoadGraph()
-  }
-
-  LoadGraph () {
-    console.log('LoadGraph() ran');
-    axios.get('http://localhost:8000/api')
-      .then(result => {
-        this.setState({graph: result.data[1]})
-      }).catch(error => {
-        console.log(error)
-    })
-  }
-
-  render () {
-    return (
-        <div className='app'>
-          <header>
-            <h1>Chanterelle</h1>
-            <h2>{this.state.graph.name}</h2>
-          </header>
-          <CyContainer graph={this.state.graph} />
-          <AddBox graph={this.state.graph} LoadGraph={this.LoadGraph}/>
-        </div>
-      )
-  }
-}
-
-render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <BrowserRouter>
+      <div>
+        <Route exact path="/" component={NextList} />
+        <Route path="/graph" component={Graph} />
+        <Route path="/login" component={LogIn} />
+      </div>
+  </BrowserRouter>,
+  document.getElementById('root')
+)

@@ -30,6 +30,17 @@ def add_node(request):
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
 
+def delete_node(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        graph = DiGraph.objects.get(pk=data['graph'])
+        node = graph.nodes.all().get(pk=data['node'])
+        graph.delete_node(node)
+        graph.save()
+        return JsonResponse({'message': 'deleted'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+
 def add_edge(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -39,4 +50,16 @@ def add_edge(request):
         graph.add_edge(parent,child)
         graph.save()
         return JsonResponse({'message': 'success'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+
+def delete_edge(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        graph = DiGraph.objects.get(pk=data['graph'])
+        parent = graph.nodes.all().get(pk=data['parent'])
+        child = graph.nodes.all().get(pk=data['child'])
+        graph.remove_edge(parent, child)
+        graph.save()
+        return JsonResponse({'message': 'deleted'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})

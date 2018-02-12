@@ -4,12 +4,14 @@
 
 .app {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas: 'header header header header'
-                       'addbox graph graph graph';
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 'icon header header login'
+                       'sidebar main main main'
+                       'footer footer footer footer';
   font-family: 'Cormorant Garamond', serif;
   color: rgba(37, 30, 34, 0.8);
+  height: 100vh;
 }
 
 header {
@@ -17,24 +19,34 @@ header {
   text-align: center;
   height: auto;
   margin: 0;
+  justify-items: center;
 }
 
 header h1 {
+  padding-top: 20px;
   font-family: 'Marck Script', cursive;
   font-size: 4.5em;
 }
 
+header h2 {
+  font-size: 2em;
+}
+
 .addBox {
   text-align: center;
-  grid-area: addbox;
+  grid-area: footer;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  border: 1px solid rgba(68, 47, 62, 0.81);
+  justify-content: center;
 }
 
 #cy {
-  grid-area: graph;
-  width: 100%;
-  height: 80vh;
+  grid-area: main;
+  justify-self: center;
+  width: 70%;
+  grid-row: 2/3;
+  border: 4px solid rgba(68, 47, 62, 0.81);
 }
 
 input {
@@ -43,4 +55,10 @@ input {
 
 h1, h2, h3, h4 {
   margin: 5px;
+}
+
+.icon {
+  grid-area: icon;
+  width: 13vw;
+  height: auto;
 }

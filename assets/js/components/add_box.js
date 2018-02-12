@@ -21,6 +21,7 @@ export default class AddBox extends Component {
       headers: {"X-CSRFToken": csrfToken}
     })
       .then(response => {
+        document.getElementById('addNode').value = '';
         console.log(response.config.data);
         this.props.LoadGraph()
       }).catch(error => {
@@ -38,7 +39,8 @@ export default class AddBox extends Component {
       headers: {"X-CSRFToken": csrfToken}
     })
       .then(response => {
-        console.log(response.config.data);
+        document.getElementById('addEdgeSource').value = '';
+        document.getElementById('addEdgeTarget').value = '';
         this.props.LoadGraph()
       }).catch(error => {
         console.log(error)
@@ -62,5 +64,3 @@ export default class AddBox extends Component {
     )
   }
 }
-
-
