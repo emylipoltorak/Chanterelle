@@ -1,24 +1,42 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
 
-export default const Header = () {
-  return
-  <header>
-    <img className='icon' src='https://cms-assets.tutsplus.com/uploads/users/877/posts/28574/image/9-drawing-mushrooms-ink-chanterelle-adding-grass.jpg' alt='Chanterelle Mushroom' />
-    <h1>Chanterelle</h1>
-    <h2>Graph: {this.state.graph.name}</h2>
-  </header>
+class Header extends Component {
+  constructor (props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <header>
+        <h1>Chanterelle</h1>
+      </header>
+    )
+  }
 }
 
-export default const Footer = () => {
-  return <footer>Li Poltorak 2018</footer>
+
+class Footer extends Component {
+  render () {
+    return (
+      <footer>Footer goes here</footer>
+    )
+  }
 }
 
-export default class Navbar extends Component {
-  <nav>
-    <ul>
-      <li><Link to='/'><button>Next List</button></Link></li>
-      <li><Link to='/graph'><button>Graph</button></Link></li>
-      <li><Link to='/login'><button>Log In</button></Link></li>
-    </ul>
-  </nav>
-}
+class Navbar extends Component {
+
+  render() {
+    return (
+      <nav>
+        <ul>
+          <li><Link to='/'><button>Next List</button></Link></li>
+          <li><Link to='/graph'><button>Graph</button></Link></li>
+          <li><Link to='/login'><button>Log In</button></Link></li>
+        </ul>
+      </nav>
+    )
+  }
+};
+
+export { Header, Footer, Navbar }

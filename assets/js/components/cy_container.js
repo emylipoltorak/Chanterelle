@@ -48,47 +48,59 @@ const cyConfig = {
 export default class CyContainer extends Component {
   constructor (props) {
     super(props);
-    this.state = {cy: {}}
-
-  }
+    this.state = {cy: {}};
+    this.renderGraph = this.renderGraph.bind(this);
+  };
 
   componentDidMount () {
     cyConfig.container = this.refs.cy;
-    this.setState({cy: cytoscape(cyConfig)})
+    this.setState({cy: cytoscape(cyConfig)});
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Component did update ran');
+    if (prevState.cy !== this.state.cy) {
+      console.log('Cy state updated, this should render the graph.')
+      this.renderGraph(this.props.graph);
+    }
   }
 
   componentWillReceiveProps (nextProps) {
     if (this.props.graph !== nextProps.graph) {
-      this.state.cy.remove('*');
-      nextProps.graph.nodes.forEach(node => {
-        this.state.cy.add({
-          data: {
-            id: node.id,
-            name: node.name,
-            inDegree: node.in_degree,
-            deepest: nextProps.graph.nodes.length
-          }
-        })
-      });
-
-      nextProps.graph.edges.forEach(edge => {
-        this.state.cy.add({
-          data: {
-            id: edge.id,
-            source: edge.parent.id,
-            target: edge.child.id
-          }
-        })
-      });
-
-      this.state.cy.elements('[name="root"]').remove();
-      this.state.cy.elements('[name="end"]').remove();
-      this.state.cy.layout({
-        name: 'dagre',
-        ranker: 'longest-path',
-        padding: 15
-      }).run();
+      this.renderGraph(nextProps.graph);
     }
+  };
+
+  renderGraph(graph) {
+    this.state.cy.remove('*');
+    graph.nodes.forEach(node => {
+      this.state.cy.add({
+        data: {
+          id: node.id,
+          name: node.name,
+          inDegree: node.in_degree,
+          deepest: graph.nodes.length
+        }
+      })
+    });
+
+    graph.edges.forEach(edge => {
+      this.state.cy.add({
+        data: {
+          id: edge.id,
+          source: edge.parent.id,
+          target: edge.child.id
+        }
+      })
+    });
+
+    this.state.cy.elements('[name="root"]').remove();
+    this.state.cy.elements('[name="end"]').remove();
+    this.state.cy.layout({
+      name: 'dagre',
+      ranker: 'longest-path',
+      padding: 15
+    }).run();
 
     this.state.cy.nodes().forEach(ele => {
         ele.qtip({
@@ -99,12 +111,12 @@ export default class CyContainer extends Component {
               axios({
                 method: 'post',
                 url: 'http://localhost:8000/delete-node/',
-                data: {node: ele.data('id'), graph: nextProps.graph.id},
+                data: {node: ele.data('id'), graph: graph.id},
                 headers: {"X-CSRFToken": csrfToken}
               })
                 .then(response => {
                   console.log(response.config.data);
-                  nextProps.LoadGraph()
+                  this.props.LoadGraph()
                 }).catch(error => {
                   console.log(error)
               })
@@ -126,39 +138,42 @@ export default class CyContainer extends Component {
         });
       });
 
-    this.state.cy.edges().forEach(ele => {
-      ele.qtip({
-        content: () => {
-          const btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
-          btn.click(() => {
-            axios({
-              method: 'post',
-              url: 'http://localhost:8000/delete-edge/',
-              data: {parent: ele.data('source'), child: ele.data('target'), graph: nextProps.graph.id},
-              headers: {"X-CSRFToken": csrfToken}
-            })
-              .then(response => {
-                console.log(response.config.data);
-                nextProps.LoadGraph();
-              }).catch(error => {
-                console.log(error)
-            })
-          });
-          return btn;
-        },
-        style: {
-          classes: 'qtip-tipsy'
-        },
-        position: {
-          my: 'bottom center',
-          at: 'right center',
-          target: ele
-        }
+      this.state.cy.edges().forEach(ele => {
+        ele.qtip({
+          content: () => {
+            const btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
+            btn.click(() => {
+              axios({
+                method: 'post',
+                url: 'http://localhost:8000/delete-edge/',
+                data: {parent: ele.data('source'), child: ele.data('target'), graph: graph.id},
+                headers: {"X-CSRFToken": csrfToken}
+              })
+                .then(response => {
+                  console.log(response.config.data);
+                  nextProps.LoadGraph();
+                }).catch(error => {
+                  console.log(error)
+              })
+            });
+            return btn;
+          },
+          style: {
+            classes: 'qtip-tipsy'
+          },
+          position: {
+            my: 'bottom center',
+            at: 'right center',
+            target: ele
+          }
+        });
       });
-    });
   }
 
   render () {
+    if (this.state.cy) {
+      this.renderGraph;
+    }
     return <div ref='cy' id='cy'/>
   }
 }
