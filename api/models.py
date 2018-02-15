@@ -1,5 +1,5 @@
 from django.db import models
-from django_dag.models import node_factory, edge_factory
+from django_dag.models import node_factory, edge_factory, NodeNotReachableException
 from django.contrib.auth.models import User
 
 
@@ -47,9 +47,10 @@ class DiGraph(models.Model):
         if not self.pk:
             super(DiGraph, self).save()
             r = TaskNode(name='root', graph=self)
-            e = TaskNode(name='end', graph=self)
             r.save()
-            e.save()
+        else:
+            for n in self.nodes.all():
+                n.save()
         super(DiGraph, self).save()
 
     # def nodes(self):
@@ -61,8 +62,8 @@ class DiGraph(models.Model):
         return TaskEdge.objects.filter(parent__graph=self)
 
     def next(self):
-        # returns a queryset of TaskNode objects with and in degree of 0.
-        return self.nodes.all().filter(in_degree=0)
+        # returns a queryset of TaskNode objects with and in degree of 1.
+        return self.nodes.all().filter(in_degree=1)
 
     def add_node(self, node):
         # if node is a TaskNode instance, this will add node to the graph.
@@ -86,18 +87,26 @@ class DiGraph(models.Model):
     def delete_node(self, node):
         # removes node from the graph while maintaining dependencies between
         # the node's parents and children.
-
+        parents = []
+        children = []
         if node in self.nodes.all():
-
             for p in node.parents():
-                for c in node.children.all():
-                    if not p.path(c):
-                        self.add_edge(p, c)
-                        p.save()
-                        c.save()
+                parents.append(p)
+            for c in node.children.all():
+                children.append(c)
             node.delete()
         else:
             print('Node {} does not exist.'.format(node))
+        for p in parents:
+            print(str(p) + ' is the parent')
+            for c in children:
+                print(str(c) + ' is a child')
+                try:
+                    p.path(c)
+                except NodeNotReachableException:
+                    self.add_edge(p, c)
+                    p.save()
+                    c.save()
 
     def remove_edge(self, a, b):
         # assume that a and b are nodes on this graph and there exists an edge a --> b

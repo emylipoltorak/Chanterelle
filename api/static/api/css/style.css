@@ -1,12 +1,17 @@
 @import url("https://fonts.googleapis.com/css?family=Cormorant+Garamond");
 @import url("https://fonts.googleapis.com/css?family=Marck+Script");
+@import url("https://fonts.googleapis.com/css?family=Nixie+One");
+@import url("https://fonts.googleapis.com/css?family=Gravitas+One");
+@import url("https://fonts.googleapis.com/css?family=Trochut");
+@import url("https://fonts.googleapis.com/css?family=Shrikhand");
 .app {
+  background-color: #F4F8F6;
   display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-columns: 1fr 7fr 1fr;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas: 'header header header' 'nav main .' 'footer footer footer';
-  font-family: 'Cormorant Garamond', serif;
-  color: rgba(37, 30, 34, 0.8);
+  grid-template-areas: 'nav header .' 'nav main .' 'footer footer footer';
+  font-family: "Nixie One", cursive;
+  color: #2C2029;
   height: 100vh;
 }
 
@@ -15,6 +20,7 @@ header {
   text-align: center;
   height: auto;
   margin: 0;
+  padding: 20px;
   justify-items: center;
 }
 
@@ -22,26 +28,79 @@ main {
   grid-area: main;
   height: 100%;
   width: 100%;
+  font-size: 50px;
 }
 
 nav {
+  margin-left: 15px;
   grid-area: nav;
+  text-align: center;
+}
+nav ul {
+  display: none;
+}
+nav li button {
+  margin: 5px;
+  border: 1px solid #2C2029;
+  background: transparent;
+  color: #2C2029;
+  height: auto;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  font-family: "Nixie One", cursive;
+}
+
+nav:hover ul {
+  display: block;
+}
+
+.fa-code-branch {
+  font-size: 5em;
+  padding: 30px;
+  color: #F0923C;
+}
+
+button:hover {
+  background-color: rgba(162, 153, 164, 0.5);
+  box-shadow: none;
+}
+
+button:selected {
+  background-color: #E04627;
+  box-shadow: none;
 }
 
 footer {
+  text-align: center;
   grid-area: footer;
-  margin-top: 3px;
-  background-color: rgba(37, 30, 34, 0.8);
+  padding: 5px;
+  color: #F4F8F6;
+  font-size: 1.5em;
+  background-color: #E04627;
+}
+
+.loading {
+  color: #E04627;
+  margin: auto;
+  text-align: center;
+  font-size: 5em;
 }
 
 header h1 {
   padding-top: 20px;
-  font-family: 'Marck Script', cursive;
-  font-size: 4.5em;
+  font-family: 'Shrikhand', cursive;
+  font-size: 5em;
+}
+header h1 span {
+  color: #F0923C;
 }
 
 header h2 {
-  font-size: 2em;
+  font-size: 3em;
+  color: #E04627;
 }
 
 .addBox {
@@ -49,14 +108,14 @@ header h2 {
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 1px solid rgba(37, 30, 34, 0.8);
+  height: 50px;
+  border: 1px solid #2C2029;
 }
 
 #cy {
   justify-self: center;
   width: 100%;
-  height: 100%;
-  /* border: 4px solid rgba(68, 47, 62, 0.81); */
+  height: calc(100% - 50px);
 }
 
 input {
@@ -67,8 +126,27 @@ h1, h2, h3, h4 {
   margin: 5px;
 }
 
-.icon {
-  grid-area: icon;
-  width: 13vw;
-  height: auto;
+.fa-times-circle {
+  visibility: hidden;
+}
+
+main ul {
+  width: 60%;
+  margin: auto;
+  margin-top: 2%;
+  text-align: center;
+}
+main ul li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  font-size: .75em;
+}
+main ul li:hover .fa-times-circle {
+  visibility: visible;
+}
+
+main .graph {
+  display: flex;
+  flex-direction: column;
 }

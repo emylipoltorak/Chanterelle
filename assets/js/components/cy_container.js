@@ -18,15 +18,14 @@ const cyConfig = {
       selector: 'node',
       style: {
         'label': 'data(name)',
-        'color': 'rgba(37, 30, 34, 0.8)',
+        'color': '#2C2029',
         'text-valign':'center',
         'text-halign': 'center',
-        'font-size': '30',
-        'shape': 'cutrectangle',
-        'background-color': 'mapData(inDegree, 1, 20, white, rgb(214, 168, 53))',
-        'border-width': '2px',
-        'border-style': 'solid',
-        'border-color': 'rgba(37, 30, 34, 0.8)',
+        'font-size': '20',
+        'shape': 'roundrectangle',
+        'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
+        'background-opacity': 'mapData(inDegree, 1, 8, .3, 1)',
+        'border-color': 'transparent',
         'width': 'label',
         'height': 'label',
         'padding': '7px'
@@ -35,11 +34,11 @@ const cyConfig = {
       selector: 'edge',
       style: {
         'curve-style': 'bezier',
-        'target-arrow-shape': 'triangle-cross',
+        'target-arrow-shape': 'triangle',
         'target-arrow-fill': 'hollow',
-        'target-arrow-color': 'rgba(37, 30, 34, 0.8)',
-        'width': '2px',
-        'color': 'rgba(37, 30, 34, 0.3)',
+        'target-arrow-color': '#2C2029',
+        'width': '1px',
+        'color': '#2C2029',
       }
     }
   ]
@@ -58,11 +57,7 @@ export default class CyContainer extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('Component did update ran');
-    if (prevState.cy !== this.state.cy) {
-      console.log('Cy state updated, this should render the graph.')
-      this.renderGraph(this.props.graph);
-    }
+    this.renderGraph(this.props.graph);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -95,7 +90,6 @@ export default class CyContainer extends Component {
     });
 
     this.state.cy.elements('[name="root"]').remove();
-    this.state.cy.elements('[name="end"]').remove();
     this.state.cy.layout({
       name: 'dagre',
       ranker: 'longest-path',
@@ -151,7 +145,7 @@ export default class CyContainer extends Component {
               })
                 .then(response => {
                   console.log(response.config.data);
-                  nextProps.LoadGraph();
+                  graph.LoadGraph();
                 }).catch(error => {
                   console.log(error)
               })

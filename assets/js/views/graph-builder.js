@@ -10,7 +10,7 @@ export default class Graph extends Component {
   render () {
     console.log(this.props.graph);
     return (
-      <main>
+      <main className='graph'>
         <CyContainer graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
         <AddBox graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
       </main>

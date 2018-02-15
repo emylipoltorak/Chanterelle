@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from api.models import DiGraph, TaskNode
+from api.models import DiGraph
 from api.serializers import DiGraphSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
 import json
+
 
 def home(request):
     return render(request, 'api/index.html')
@@ -47,7 +48,7 @@ def add_edge(request):
         graph = DiGraph.objects.get(pk=data['graph'])
         parent = graph.nodes.get(name=data['parent'])
         child = graph.nodes.get(name=data['child'])
-        graph.add_edge(parent,child)
+        graph.add_edge(parent, child)
         graph.save()
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})

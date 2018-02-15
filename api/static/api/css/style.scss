@@ -1,16 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond');
 @import url('https://fonts.googleapis.com/css?family=Marck+Script');
+@import url('https://fonts.googleapis.com/css?family=Nixie+One');
+@import url('https://fonts.googleapis.com/css?family=Gravitas+One');
+@import url('https://fonts.googleapis.com/css?family=Trochut');
+@import url('https://fonts.googleapis.com/css?family=Shrikhand');
 
-$dark-color: rgba(37, 30, 34, 0.8);
+$dark-color: #2C2029;
+$chanterelle: #F0923C;
+$contrast: #E04627;
+$lightest: #F4F8F6;
+$accent: #A299A4;
+$main-font: 'Nixie One', cursive;
 
 .app {
+  background-color: $lightest;
   display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-columns: 1fr 7fr 1fr;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas: 'header header header'
+  grid-template-areas: 'nav header .'
                        'nav main .'
                        'footer footer footer';
-  font-family: 'Cormorant Garamond', serif;
+  font-family: $main-font;
   color: $dark-color;
   height: 100vh;
 }
@@ -20,6 +30,7 @@ header {
   text-align: center;
   height: auto;
   margin: 0;
+  padding: 20px;
   justify-items: center;
 }
 
@@ -27,26 +38,78 @@ main {
   grid-area: main;
   height: 100%;
   width: 100%;
+  font-size: 50px;
 }
 
 nav {
+  margin-left: 15px;
   grid-area: nav;
+  text-align: center;
+  ul {
+    display: none;
+  }
+  li button {
+    margin: 5px;
+    border: 1px solid $dark-color;
+    background: transparent;
+    color: $dark-color;
+    height: auto;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    font-family: $main-font;
+  }
+}
+
+nav:hover ul{
+  display: block;
+}
+
+.fa-code-branch {
+  font-size: 5em;
+  padding: 30px;
+  color: $chanterelle;
+}
+
+button:hover {
+  background-color: rgba($accent, .5);
+  box-shadow: none;
+}
+button:selected {
+  background-color: $contrast;
+  box-shadow: none;
 }
 
 footer {
+  text-align: center;
   grid-area: footer;
-  margin-top: 3px;
-  background-color: rgba(37, 30, 34, 0.8);
+  padding: 5px;
+  color: $lightest;
+  font-size: 1.5em;
+  background-color: $contrast;
+}
+
+.loading {
+  color: $contrast;
+  margin: auto;
+  text-align: center;
+  font-size: 5em;
 }
 
 header h1 {
   padding-top: 20px;
-  font-family: 'Marck Script', cursive;
-  font-size: 4.5em;
+  font-family: 'Shrikhand', cursive;
+  font-size: 5em;
+  span {
+    color: $chanterelle;
+  }
 }
 
 header h2 {
-  font-size: 2em;
+  font-size: 3em;
+  color: $contrast;
 }
 
 .addBox {
@@ -54,14 +117,14 @@ header h2 {
   display: flex;
   flex-direction: row;
   width: 100%;
+  height: 50px;
   border: 1px solid $dark-color;
 }
 
 #cy {
   justify-self: center;
   width: 100%;
-  height: 100%;
-  /* border: 4px solid rgba(68, 47, 62, 0.81); */
+  height: calc(100% - 50px);
 }
 
 input {
@@ -72,8 +135,28 @@ h1, h2, h3, h4 {
   margin: 5px;
 }
 
-.icon {
-  grid-area: icon;
-  width: 13vw;
-  height: auto;
+.fa-times-circle {
+  visibility: hidden;
+}
+
+main ul {
+  width: 60%;
+  margin: auto;
+  margin-top: 2%;
+  text-align: center;
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+    font-size: .75em;
+  }
+  li:hover {
+    .fa-times-circle {
+      visibility: visible;
+    }
+  }
+}
+main .graph {
+  display: flex;
+  flex-direction: column;
 }
