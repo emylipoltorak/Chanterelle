@@ -82,6 +82,42 @@ button:selected {
   box-shadow: none;
 }
 
+.authForm {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 60%;
+  height: 60%;
+  justify-content: space-between;
+  font-size: 0.6em;
+  align-items: center;
+  input[type='submit'] {
+    margin: 5px;
+    border: 1px solid $dark-color;
+    background: rgba($chanterelle, 0.6);
+    color: $dark-color;
+    height: auto;
+    width: auto;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    font-family: $main-font;
+  }
+  input[type='text'] {
+    width: 60%;
+  }
+  label {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  input[type='submit']:hover {
+    background: $chanterelle;
+  }
+
+}
+
 footer {
   text-align: center;
   grid-area: footer;
@@ -125,6 +161,7 @@ header h2 {
   justify-self: center;
   width: 100%;
   height: calc(100% - 50px);
+  font-family: 'Nixie One', cursive;
 }
 
 input {

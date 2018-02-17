@@ -22,9 +22,10 @@ const cyConfig = {
         'text-valign':'center',
         'text-halign': 'center',
         'font-size': '20',
+        'font-family': 'Nixie One, cursive',
         'shape': 'roundrectangle',
-        'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
-        'background-opacity': 'mapData(inDegree, 1, 8, .3, 1)',
+        'background-color': 'mapData(inDegree, 1, 5, rgba(163, 154, 164), rgba(240, 146, 60))',
+        'background-opacity': 'mapData(inDegree, 1, 5, .3, 1)',
         'border-color': 'transparent',
         'width': 'label',
         'height': 'label',
@@ -74,6 +75,7 @@ export default class CyContainer extends Component {
           id: node.id,
           name: node.name,
           inDegree: node.in_degree,
+          outDegree: node.out_degree,
           deepest: graph.nodes.length
         }
       })
@@ -90,11 +92,21 @@ export default class CyContainer extends Component {
     });
 
     this.state.cy.elements('[name="root"]').remove();
+
+    let island = this.state.cy.nodes().roots().leaves();
+    let nonIsland = this.state.cy.nodes(!island);
+    console.log(island);
+    console.log(nonIsland);
+
     this.state.cy.layout({
       name: 'dagre',
       ranker: 'longest-path',
       padding: 15
     }).run();
+    //
+    // island.layout({
+    //   name: 'grid',
+    // }).run();
 
     this.state.cy.nodes().forEach(ele => {
         ele.qtip({

@@ -47,7 +47,8 @@ export default class NextList extends Component {
       method: 'post',
       url: 'http://localhost:8000/delete-node/',
       data: {node: node, graph: this.props.graph.id},
-      headers: {"X-CSRFToken": csrfToken}
+      headers: {"X-CSRFToken": csrfToken,
+                'Authorization': 'Token ' + localStorage.token}
     })
       .then(response => {
         console.log(response);

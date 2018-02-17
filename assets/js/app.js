@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Header, Footer, Navbar } from './components/ui';
 import { Main } from './main';
 import axios from 'axios';
-import { BounceLoader } from 'react-spinners';
 
 export default class App extends Component {
   constructor (props) {

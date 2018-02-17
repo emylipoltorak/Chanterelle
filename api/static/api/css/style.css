@@ -73,6 +73,41 @@ button:selected {
   box-shadow: none;
 }
 
+.authForm {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 60%;
+  height: 60%;
+  justify-content: space-between;
+  font-size: 0.6em;
+  align-items: center;
+}
+.authForm input[type='submit'] {
+  margin: 5px;
+  border: 1px solid #2C2029;
+  background: rgba(240, 146, 60, 0.6);
+  color: #2C2029;
+  height: auto;
+  width: auto;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  font-family: "Nixie One", cursive;
+}
+.authForm input[type='text'] {
+  width: 60%;
+}
+.authForm label {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.authForm input[type='submit']:hover {
+  background: #F0923C;
+}
+
 footer {
   text-align: center;
   grid-area: footer;
@@ -116,6 +151,7 @@ header h2 {
   justify-self: center;
   width: 100%;
   height: calc(100% - 50px);
+  font-family: 'Nixie One', cursive;
 }
 
 input {
