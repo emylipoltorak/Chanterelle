@@ -10,25 +10,15 @@ import auth from './auth';
 class Main extends Component {
   constructor (props) {
     super(props);
-    this.requireAuth = this.requireAuth.bind(this);
-  }
-
-  requireAuth (nextState, replace) {
-    if (!auth.loggedIn()) {
-      replace({
-        pathname:'/login',
-        state: {nextPathname: '/'}
-      })
-    }
   }
 
   render () {
     return (
       <main>
         <Switch>
-          <Route exact path='/' render={(defaultProps) => <NextList {...props} {...defaultProps} />} onEnter={this.requireAuth} />
-          <Route path='/graph' render={(defaultProps) => <Graph {...props}  {...defaultProps} />} onEnter={this.requireAuth} />
-          <Route path='/login' component={LogIn}/>
+          <Route exact path='/' render={(defaultProps) => this.props.isLoggedIn ? <NextList {...this.props} {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
+          <Route path='/graph' render={(defaultProps) => this.props.isLoggedIn ? <Graph {...this.props}  {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
+          <Route path='/login' render={(defaultProps) => <LogIn {...this.props} {...defaultProps} />} />
         </Switch>
       </main>
     )

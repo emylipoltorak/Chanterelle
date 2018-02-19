@@ -12,7 +12,7 @@ export default class Graph extends Component {
     return (
       <main className='graph'>
         <CyContainer graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
-        {/* <AddBox graph={this.props.graph} LoadGraph={this.props.LoadGraph} /> */}
+        <AddBox graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
       </main>
     )};
 }

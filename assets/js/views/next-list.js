@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Header, Footer, Navbar } from '../components/ui';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -26,7 +25,7 @@ export default class NextList extends Component {
   }
 
   getNext(graph) {
-    let next = []
+    const next = []
     graph.nodes.forEach(node => {
       if (node.in_degree === 1) {
         next.push(node)

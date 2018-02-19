@@ -14,23 +14,28 @@ export default class LogIn extends Component {
     this.handlePwChange = this.handlePwChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.isLoggedIn !== nextProps.isLoggedIn) {
+      console.log(nextProps.isLoggedIn);
+    }
+  }
+
   handleNameChange(e) {
     this.setState({userName:e.target.value});
   }
 
   handlePwChange(e) {
-    this.setState({pw:e.target.value})
+    this.setState({pw: e.target.value})
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.userName);
-    console.log(this.state.pw);
     document.getElementById('userName').value='';
     document.getElementById('pw').value='';
-    auth.login(this.state.userName, this.state.pw, (loggedIn) => {
+    const updateLogIn = this.props.checkLogIn;
+    auth.login(this.state.userName, this.state.pw,(loggedIn) => {
       if (loggedIn) {
-        this.context.router.replace('/')
+        updateLogIn();
       }
     })
   };
@@ -45,7 +50,7 @@ export default class LogIn extends Component {
         </label>
         <label>
           Password:
-          <input type='text' name='pw' id='pw' onChange={this.handlePwChange}/>
+          <input type='password' name='pw' id='pw' onChange={this.handlePwChange}/>
         </label>
         <input type='submit' value='Submit'/>
       </form>

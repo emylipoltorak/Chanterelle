@@ -104,7 +104,7 @@ button:selected {
     font-size: 30px;
     font-family: $main-font;
   }
-  input[type='text'] {
+  input[type='text'], input[type='password'] {
     width: 60%;
   }
   label {

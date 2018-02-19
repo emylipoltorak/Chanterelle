@@ -33,19 +33,21 @@ module.exports = {
 
   getToken: function(username, pass, cb) {
     axios({
-      type: 'POST',
-      url: 'localhost:8000/obtain-auth-token',
+      method: 'POST',
+      url: '/obtain-auth-token/',
       data: {
         username: username,
         password: pass,
       },
-      headers: {'Access-Control-Allow-Credentials': true}
+      headers: {
+        'Access-Control-Allow-Credentials': true,
+      }
     })
       .then(res => {
-        console.log(res.token);
+        console.log(res.data.token);
         cb({
           authenticated: true,
-          token: res.token
+          token: res.data.token
         })
       }).catch(error => {
         console.log(error);
