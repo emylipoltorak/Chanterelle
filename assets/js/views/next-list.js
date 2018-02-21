@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const csrfToken = Cookies.get('csrftoken');
+const authToken = 'Token '+localStorage.token;
 
 
 export default class NextList extends Component {
@@ -44,10 +45,12 @@ export default class NextList extends Component {
     console.log(node);
     axios({
       method: 'post',
-      url: 'http://localhost:8000/delete-node/',
+      url: '/delete-node/',
       data: {node: node, graph: this.props.graph.id},
-      headers: {"X-CSRFToken": csrfToken,
-                'Authorization': 'Token ' + localStorage.token}
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": authToken
+      }
     })
       .then(response => {
         console.log(response);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 
 const csrfToken = Cookies.get('csrftoken');
+const authToken = 'Token ' + localStorage.token;
 
 export default class AddBox extends Component {
 
@@ -16,13 +17,15 @@ export default class AddBox extends Component {
     const newName = document.getElementById('addNode').value;
     axios({
       method: 'post',
-      url: 'http://localhost:8000/add-node/',
+      url: '/add-node/',
       data:{name: newName, graph: this.props.graph.id},
-      headers: {"X-CSRFToken": csrfToken}
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": authToken
+      }
     })
       .then(response => {
         document.getElementById('addNode').value = '';
-        console.log(response.config.data);
         this.props.LoadGraph()
       }).catch(error => {
         console.log(error)
@@ -34,9 +37,12 @@ export default class AddBox extends Component {
     const target = document.getElementById('addEdgeTarget').value;
     axios({
       method: 'post',
-      url: 'http://localhost:8000/add-edge/',
+      url: '/add-edge/',
       data:{parent: source, child: target, graph: this.props.graph.id},
-      headers: {"X-CSRFToken": csrfToken}
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": authToken
+      }
     })
       .then(response => {
         document.getElementById('addEdgeSource').value = '';

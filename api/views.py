@@ -29,6 +29,12 @@ class DiGraphList(APIView):
         serializer = DiGraphSerializer(graphs, many=True)
         return Response(serializer.data)
 
+class DiGraphByUser(APIView):
+    def post(self, request, format=None):
+        graphs = Digraph.objects.filter(owner__username = request.username)
+        serializer = DiGraphSerializer(graphs, many=True)
+        return Response(serializer.data)
+
 
 def add_node(request):
     if request.method == 'POST':
@@ -44,6 +50,7 @@ def add_node(request):
 def delete_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
+        print(data)
         graph = DiGraph.objects.get(pk=data['graph'])
         node = graph.nodes.all().get(pk=data['node'])
         graph.delete_node(node)
@@ -56,8 +63,8 @@ def add_edge(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         graph = DiGraph.objects.get(pk=data['graph'])
-        parent = graph.nodes.get(name=data['parent'])
-        child = graph.nodes.get(name=data['child'])
+        parent = graph.nodes.get(pk=data['parent'])
+        child = graph.nodes.get(pk=data['child'])
         graph.add_edge(parent, child)
         graph.save()
         return JsonResponse({'message': 'success'})

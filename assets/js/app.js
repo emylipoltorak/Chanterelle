@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Footer, Navbar } from './components/ui';
+import { Header, Footer, Navbar, AuthButtons } from './components/ui';
 import { Main } from './main';
 import axios from 'axios';
 import auth from './auth';
@@ -7,9 +7,10 @@ import auth from './auth';
 export default class App extends Component {
   constructor (props) {
     super(props);
-    this.state = {graph: {}, isLoggedIn:false};
-    this.LoadGraph = this.LoadGraph.bind(this)
-    this.checkLogIn = this.checkLogIn.bind(this)
+    this.state = {graph: {}, isLoggedIn:false, username: ''};
+    this.LoadGraph = this.LoadGraph.bind(this);
+    this.checkLogIn = this.checkLogIn.bind(this);
+    this.updateUsername = this.updateUsername.bind(this);
   }
 
   componentWillMount() {
@@ -18,8 +19,11 @@ export default class App extends Component {
   }
 
   checkLogIn() {
-    console.log('checkLogIn ran')
     this.setState({isLoggedIn: auth.loggedIn()})
+  }
+
+  updateUsername(username) {
+    this.setState({username: username})
   }
 
   LoadGraph () {
@@ -34,9 +38,10 @@ export default class App extends Component {
   render () {
     return (
       <div className='app'>
-        <Header graph={this.state.graph} isLoggedIn={this.state.isLoggedIn} />
-        <Navbar isLoggedIn={this.state.isLoggedIn} />
-        { this.state.graph.nodes ? <Main graph={this.state.graph} isLoggedIn={this.state.isLoggedIn} LoadGraph={this.LoadGraph} checkLogIn={this.checkLogIn} /> : <main><h1 className='loading'>...</h1></main>}
+        <Header graph={this.state.graph} />
+        <AuthButtons isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} />
+        <Navbar isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} />
+        { this.state.graph.nodes ? <Main graph={this.state.graph} isLoggedIn={this.state.isLoggedIn} LoadGraph={this.LoadGraph} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} /> : <main><h1 className='loading'>...</h1></main>}
         <Footer />
       </div>
       )

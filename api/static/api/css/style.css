@@ -7,9 +7,9 @@
 .app {
   background-color: #F4F8F6;
   display: grid;
-  grid-template-columns: 1fr 7fr 1fr;
+  grid-template-columns: 1fr 6fr 1fr;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas: 'nav header .' 'nav main .' 'footer footer footer';
+  grid-template-areas: 'nav header auth-buttons' 'nav main .' 'footer footer footer';
   font-family: "Nixie One", cursive;
   color: #2C2029;
   height: 100vh;
@@ -22,6 +22,29 @@ header {
   margin: 0;
   padding: 20px;
   justify-items: center;
+}
+
+#auth-buttons {
+  grid-area: auth-buttons;
+  margin-top: 30px;
+  margin-right: 30px;
+  align-items: center;
+}
+#auth-buttons button {
+  margin: 5px;
+  border: 1px solid #2C2029;
+  background: transparent;
+  color: #2C2029;
+  height: auto;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 25px;
+  font-family: "Nixie One", cursive;
+}
+#auth-buttons button:hover {
+  background: rgba(162, 153, 164, 0.5);
 }
 
 main {
@@ -86,8 +109,8 @@ button:selected {
 .authForm input[type='submit'] {
   margin: 5px;
   border: 1px solid #2C2029;
-  background: rgba(240, 146, 60, 0.6);
-  color: #2C2029;
+  background: #F0923C;
+  color: #F4F8F6;
   height: auto;
   width: auto;
   text-align: center;
@@ -105,7 +128,22 @@ button:selected {
   justify-content: space-between;
 }
 .authForm input[type='submit']:hover {
-  background: #F0923C;
+  background: rgba(240, 146, 60, 0.9);
+}
+
+.add {
+  align-self: center;
+  margin: 5px;
+  border: 1px solid #2C2029;
+  background: transparent;
+  color: #2C2029;
+  height: auto;
+  width: 200px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  font-family: "Nixie One", cursive;
 }
 
 footer {
@@ -185,4 +223,10 @@ main ul li:hover .fa-times-circle {
 main .graph {
   display: flex;
   flex-direction: column;
+}
+
+main h1 {
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }

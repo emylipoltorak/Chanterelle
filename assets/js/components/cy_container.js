@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import cyqtip from 'cytoscape-qtip';
+import edgehandles from 'cytoscape-edgehandles';
 import axios from 'axios';
 const $ = require('jquery');
 import Cookies from 'js-cookie';
 
 const csrfToken = Cookies.get('csrftoken');
+const authToken = 'Token '+localStorage.token;
+
 
 cyqtip( cytoscape );
 cytoscape.use( dagre );
+cytoscape.use( edgehandles );
+
+let cy = {};
 
 const cyConfig = {
   elements: [],
@@ -48,29 +54,33 @@ const cyConfig = {
 export default class CyContainer extends Component {
   constructor (props) {
     super(props);
-    this.state = {cy: {}};
     this.renderGraph = this.renderGraph.bind(this);
   };
 
   componentDidMount () {
+    console.log('componentDidMount');
     cyConfig.container = this.refs.cy;
-    this.setState({cy: cytoscape(cyConfig)});
+    cy = cytoscape(cyConfig);
+    this.renderGraph(this.props.graph);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    this.renderGraph(this.props.graph);
-  }
-
   componentWillReceiveProps (nextProps) {
+    console.log('componentWillReceiveProps')
     if (this.props.graph !== nextProps.graph) {
       this.renderGraph(nextProps.graph);
     }
   };
 
+  componentWillUnmount () {
+    cy.destroy();
+  }
+
   renderGraph(graph) {
-    this.state.cy.remove('*');
+    cy.destroy();
+    cy = cytoscape(cyConfig);
+    console.log('renderGraph');
     graph.nodes.forEach(node => {
-      this.state.cy.add({
+      cy.add({
         data: {
           id: node.id,
           name: node.name,
@@ -82,7 +92,7 @@ export default class CyContainer extends Component {
     });
 
     graph.edges.forEach(edge => {
-      this.state.cy.add({
+      cy.add({
         data: {
           id: edge.id,
           source: edge.parent.id,
@@ -91,24 +101,22 @@ export default class CyContainer extends Component {
       })
     });
 
-    this.state.cy.elements('[name="root"]').remove();
+    cy.elements('[name="root"]').remove();
 
-    let island = this.state.cy.nodes().roots().leaves();
-    let nonIsland = this.state.cy.nodes(!island);
-    console.log(island);
-    console.log(nonIsland);
+    let island = cy.nodes().roots().leaves();
+    let nonIsland = cy.nodes(!island);
 
-    this.state.cy.layout({
+    cy.layout({
       name: 'dagre',
       ranker: 'longest-path',
       padding: 15
     }).run();
-    //
+
     // island.layout({
     //   name: 'grid',
     // }).run();
 
-    this.state.cy.nodes().forEach(ele => {
+    cy.nodes().forEach(ele => {
         ele.qtip({
           content: () => {
             const delBtn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
@@ -116,12 +124,14 @@ export default class CyContainer extends Component {
             delBtn.click(() => {
               axios({
                 method: 'post',
-                url: 'http://localhost:8000/delete-node/',
+                url: '/delete-node/',
                 data: {node: ele.data('id'), graph: graph.id},
-                headers: {"X-CSRFToken": csrfToken}
+                headers: {
+                  "X-CSRFTOKEN": csrfToken,
+                  "Authorization": authToken
+                }
               })
                 .then(response => {
-                  console.log(response.config.data);
                   this.props.LoadGraph()
                 }).catch(error => {
                   console.log(error)
@@ -144,22 +154,24 @@ export default class CyContainer extends Component {
         });
       });
 
-      this.state.cy.edges().forEach(ele => {
+      cy.edges().forEach(ele => {
         ele.qtip({
           content: () => {
             const btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             btn.click(() => {
               axios({
                 method: 'post',
-                url: 'http://localhost:8000/delete-edge/',
+                url: '/delete-edge/',
                 data: {parent: ele.data('source'), child: ele.data('target'), graph: graph.id},
-                headers: {"X-CSRFToken": csrfToken}
+                headers: {
+                  "X-CSRFTOKEN": csrfToken,
+                  "Authorization": authToken
+                }
               })
                 .then(response => {
-                  console.log(response.config.data);
-                  graph.LoadGraph();
+                  this.props.LoadGraph();
                 }).catch(error => {
-                  console.log(error)
+                  console.log(error);
               })
             });
             return btn;
@@ -174,12 +186,30 @@ export default class CyContainer extends Component {
           }
         });
       });
+
+      let eh = cy.edgehandles();
+      eh.enableDrawMode();
+
+      cy.on('ehcomplete', (e, sourceNode, targetNode, addedEles) => {
+        console.log('edge handle complete');
+        axios({
+          method: 'post',
+          url: '/add-edge/',
+          data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.graph.id},
+          headers: {
+            "X-CSRFTOKEN": csrfToken,
+            "Authorization": authToken
+          }
+        })
+          .then(response => {
+            this.props.LoadGraph()
+          }).catch(error => {
+            console.log(error)
+        })
+      });
   }
 
   render () {
-    if (this.state.cy) {
-      this.renderGraph;
-    }
     return <div ref='cy' id='cy'/>
   }
 }

@@ -18,7 +18,7 @@ class Main extends Component {
         <Switch>
           <Route exact path='/' render={(defaultProps) => this.props.isLoggedIn ? <NextList {...this.props} {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
           <Route path='/graph' render={(defaultProps) => this.props.isLoggedIn ? <Graph {...this.props}  {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
-          <Route path='/login' render={(defaultProps) => <LogIn {...this.props} {...defaultProps} />} />
+          <Route path='/login' render={(defaultProps) => !this.props.isLoggedIn ? <LogIn {...this.props} {...defaultProps} /> : <h1>Logged in as {this.props.username}</h1>} />
         </Switch>
       </main>
     )

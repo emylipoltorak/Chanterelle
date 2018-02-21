@@ -18,6 +18,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', a_views.home),
     path('api/', a_views.DiGraphList.as_view()),
+    path('api/graphs-by-username/', a_views.DiGraphByUser.as_view()),
     path('add-node/', a_views.add_node),
     path('add-edge/', a_views.add_edge),
     path('delete-node/', a_views.delete_node),

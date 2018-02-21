@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Header, Footer, Navbar } from '../components/ui';
-import BrowserRouter from 'react-router-dom';
 import auth from '../auth';
 
 export default class LogIn extends Component {
@@ -12,12 +10,6 @@ export default class LogIn extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handlePwChange = this.handlePwChange.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.isLoggedIn !== nextProps.isLoggedIn) {
-      console.log(nextProps.isLoggedIn);
-    }
   }
 
   handleNameChange(e) {
@@ -33,9 +25,11 @@ export default class LogIn extends Component {
     document.getElementById('userName').value='';
     document.getElementById('pw').value='';
     const updateLogIn = this.props.checkLogIn;
+    const updateUsername = this.props.updateUsername;
     auth.login(this.state.userName, this.state.pw,(loggedIn) => {
       if (loggedIn) {
         updateLogIn();
+        updateUsername(this.state.userName);
       }
     })
   };

@@ -33,9 +33,12 @@
     "axios": "^0.17.1",
     "cytoscape": "^3.2.8",
     "cytoscape-dagre": "^2.2.0",
+    "cytoscape-edgehandles": "^3.2.1",
     "cytoscape-qtip": "^2.7.1",
-    "emotion": "^9.0.1",
+    "emotion": "^8.0.12",
     "js-cookie": "^2.2.0",
+    "l": "^0.6.0",
+    "react-responsive-modal": "^2.0.0",
     "react-router-dom": "^4.2.2",
     "react-spinners": "^0.2.6",
     "webpack-dev-server": "^2.11.1"

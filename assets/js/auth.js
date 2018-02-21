@@ -44,7 +44,6 @@ module.exports = {
       }
     })
       .then(res => {
-        console.log(res.data.token);
         cb({
           authenticated: true,
           token: res.data.token
