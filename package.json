@@ -36,6 +36,7 @@
     "cytoscape-edgehandles": "^3.2.1",
     "cytoscape-qtip": "^2.7.1",
     "emotion": "^8.0.12",
+    "immutability-helper": "^2.6.5",
     "js-cookie": "^2.2.0",
     "l": "^0.6.0",
     "react-responsive-modal": "^2.0.0",

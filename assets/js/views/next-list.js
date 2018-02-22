@@ -65,7 +65,7 @@ export default class NextList extends Component {
         <ul>
           {this.state.next.map(node => {
               return <li key={node.id}>
-                {node.name} <span id={node.id} onClick={this.deleteTask}><i className="far fa-times-circle"></i></span>
+                <i className="fas fa-genderless"></i> {node.name} <span id={node.id} onClick={this.deleteTask}><i className="far fa-times-circle"></i></span>
               </li>;
             })}
         </ul>

@@ -4,6 +4,11 @@
 @import url('https://fonts.googleapis.com/css?family=Gravitas+One');
 @import url('https://fonts.googleapis.com/css?family=Trochut');
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
+@import "animated/animated";
+
+@include animation(slide-in-down);
+@include animation(fade-in);
+@include animation(fade-out);
 
 $dark-color: #2C2029;
 $chanterelle: #F0923C;
@@ -11,6 +16,7 @@ $contrast: #E04627;
 $lightest: #F4F8F6;
 $accent: #A299A4;
 $main-font: 'Nixie One', cursive;
+
 
 .app {
   background-color: $lightest;
@@ -40,6 +46,7 @@ header {
   margin-right: 30px;
   align-items: center;
   button {
+    @include animate-simple(background-color, 200ms, ease-in-out);
     margin: 5px;
     border: 1px solid $dark-color;
     background: transparent;
@@ -53,6 +60,7 @@ header {
     font-family: $main-font;
   }
   button:hover {
+    @include animate-simple(background-color, 200ms, ease-in-out);
     background: rgba($accent, .5)
   }
 }
@@ -69,7 +77,8 @@ nav {
   grid-area: nav;
   text-align: center;
   ul {
-    display: none;
+    opacity: 0;
+    @include animate(fade-out, 800ms);
   }
   li button {
     margin: 5px;
@@ -87,7 +96,8 @@ nav {
 }
 
 nav:hover ul{
-  display: block;
+  @include animate(fade-in, 800ms);
+  opacity: 100%;
 }
 
 .fa-code-branch {
@@ -96,7 +106,12 @@ nav:hover ul{
   color: $chanterelle;
 }
 
+button {
+  @include animate-simple(background-color, 200ms, ease-in-out);
+}
+
 button:hover {
+  @include animate-simple(background-color, 200ms, ease-in-out);
   background-color: rgba($accent, .5);
   box-shadow: none;
 }
@@ -115,6 +130,7 @@ button:selected {
   font-size: 0.6em;
   align-items: center;
   input[type='submit'] {
+    @include animate-simple(background-color, 200ms, ease-in-out);
     margin: 5px;
     border: 1px solid $dark-color;
     background: $chanterelle;
@@ -136,6 +152,7 @@ button:selected {
     justify-content: space-between;
   }
   input[type='submit']:hover {
+    @include animate-simple(background-color, 200ms, ease-in-out);
     background: rgba($chanterelle, 0.9);
   }
 
@@ -157,12 +174,35 @@ button:selected {
 }
 
 footer {
-  text-align: center;
   grid-area: footer;
+  display: flex;
+  justify-content: space-around;
   padding: 5px;
   color: $lightest;
   font-size: 1.5em;
   background-color: $contrast;
+  a:visited, a:link {
+    @include animate-simple();
+    text-decoration: none;
+    color: rgba($lightest, 0.75);
+  }
+  a:hover {
+    @include animate-simple();
+    color: $lightest;
+  }
+  .social-buttons {
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+    a:visited, a:link {
+      @include animate-simple();
+      color: rgba($lightest, 0.4);
+    }
+    a:hover {
+      @include animate-simple();
+      color: rgba($lightest, 0.75);
+    }
+  }
 }
 
 .loading {
@@ -186,13 +226,73 @@ header h2 {
   color: $contrast;
 }
 
+.Modal-modal-0-1-3 {
+  background-color: $lightest;
+}
+
 .addBox {
-  text-align: center;
+  font-family: $main-font;
+  color: $dark-color;
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 50px;
-  border: 1px solid $dark-color;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  textarea  {
+    width: 100%;
+    height: 250px;
+  }
+  h1 {
+    align-self: center;
+    font-size: 30px;
+    margin-bottom: 15px;
+    color: $contrast;
+  }
+  label {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-left: 45px;
+    margin-right: 45px;
+  }
+
+  textarea {
+    margin-top: 10px;
+  }
+
+  input, textarea {
+    font-family: $main-font;
+    font-size: 20px;
+    background-color: white;
+  }
+  label, input {
+    font-size: 25px;
+  }
+  #name {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    input {
+      width: 60%;
+    }
+  }
+  button[type='submit'] {
+    @include animate-simple(background-color, 200ms, ease-in-out);
+    align-self: center;
+    margin: 5px;
+    border: 1px solid $dark-color;
+    background: transparent;
+    color: $dark-color;
+    height: auto;
+    width: auto;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    font-family: $main-font;
+  }
+  button[type='submit']:hover {
+    @include animate-simple(background-color, 200ms, ease-in-out);
+    background: rgba($accent, 0.5);
+  }
 }
 
 #cy {
@@ -211,23 +311,31 @@ h1, h2, h3, h4 {
 }
 
 .fa-times-circle {
-  visibility: hidden;
+  @include animate-simple();
+  color: $lightest;
 }
 
 main ul {
-  width: 60%;
+  width: 70%;
   margin: auto;
   margin-top: 2%;
-  text-align: center;
+  text-align: right;
   li {
     display: flex;
-    justify-content: space-between;
+    width: 100%;
     padding: 4px 8px;
     font-size: .75em;
+    .fa-genderless {
+      margin-right: 10px;
+    }
+    span:last-child {
+      margin-left: auto;
+    }
   }
   li:hover {
     .fa-times-circle {
-      visibility: visible;
+      @include animate-simple();
+      color: $dark-color;
     }
   }
 }

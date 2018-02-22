@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 
 class TaskNode(node_factory('TaskEdge')):
     name = models.CharField(max_length=32)
+    description = models.TextField(null=True, blank=True)
     in_degree = models.IntegerField(editable=False, null=True)
     out_degree = models.IntegerField(editable=False, null=True)
     graph = models.ForeignKey('DiGraph', related_name='nodes', null=True, blank=True, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Tasks'
@@ -65,13 +65,13 @@ class DiGraph(models.Model):
         # returns a queryset of TaskNode objects with and in degree of 1.
         return self.nodes.all().filter(in_degree=1)
 
-    def add_node(self, node):
+    def add_node(self, node, description=''):
         # if node is a TaskNode instance, this will add node to the graph.
         # if node is a string, this will create a new TaskNode and add it to the graph.
 
         while not isinstance(node, TaskNode):
             if isinstance(node, str):
-                node = TaskNode(name=node, graph=self)
+                node = TaskNode(name=node, graph=self, description=description)
                 node.save()
             else:
                 print('Not a string or TaskNode instance')

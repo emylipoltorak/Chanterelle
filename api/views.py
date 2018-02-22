@@ -40,8 +40,9 @@ def add_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         name = data['name']
+        description = data['description']
         graph = DiGraph.objects.get(pk=data['graph'])
-        graph.add_node(name)
+        graph.add_node(name, description=description)
         graph.save()
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
@@ -80,4 +81,17 @@ def delete_edge(request):
         graph.remove_edge(parent, child)
         graph.save()
         return JsonResponse({'message': 'deleted'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def register_user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        username = data['username']
+        password = data['password']
+        print('username: {}, password: {}'.format(username, password))
+        user = User.objects.create_user(username=username, password=password)
+        user.save()
+        graph = DiGraph(name="{}'s Tasks".format(username.title()), owner=user)
+        graph.save()
+        return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})

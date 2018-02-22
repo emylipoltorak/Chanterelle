@@ -11,6 +11,7 @@ export default class App extends Component {
     this.LoadGraph = this.LoadGraph.bind(this);
     this.checkLogIn = this.checkLogIn.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
+    this.updateWorkflow = this.updateWorkflow.bind(this);
   }
 
   componentWillMount() {
@@ -24,6 +25,10 @@ export default class App extends Component {
 
   updateUsername(username) {
     this.setState({username: username})
+  }
+
+  updateWorkflow (newWorkFlow){
+
   }
 
   LoadGraph () {
@@ -40,7 +45,7 @@ export default class App extends Component {
       <div className='app'>
         <Header graph={this.state.graph} />
         <AuthButtons isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} />
-        <Navbar isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} />
+        <Navbar graphs={this.state.graphs} graph={this.state.graph} updateWorkflow={this.updateWorkflow} isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} />
         { this.state.graph.nodes ? <Main graph={this.state.graph} isLoggedIn={this.state.isLoggedIn} LoadGraph={this.LoadGraph} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} /> : <main><h1 className='loading'>...</h1></main>}
         <Footer />
       </div>

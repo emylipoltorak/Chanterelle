@@ -30,7 +30,15 @@ class Header extends Component {
 class Footer extends Component {
   render () {
     return (
-      <footer>Footer goes here</footer>
+      <footer>
+        <a href='http://lipoltorak.com'><p><i className="far fa-copyright"></i>Emyli Poltorak 2018</p></a>
+        <div className='social-buttons'>
+          <a href='https://github.com/emylipoltorak'><i className="fab fa-github-alt"></i></a>
+          <a href='https://www.linkedin.com/in/li-poltorak/'><i className="fab fa-linkedin-in"></i></a>
+          <a href='mailto:emyli.poltorak@gmail.com'><i className="fas fa-at"></i></a>
+          <a href='https://www.codepen.io/Emyli/'><i className="fab fa-codepen"></i></a>
+        </div>
+      </footer>
     )
   }
 }
@@ -45,11 +53,29 @@ const AuthButtons = (props) => {
 }
 
 class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleWorkflowSelect = this.handleWorkflowSelect.bind(this);
+  }
+
+  handleWorkflowSelect(e) {
+    this.updateWorkflow(e.target.id);
+  }
+
   render() {
     return (
       <nav>
         <i className="fas fa-code-branch fa-rotate-180"></i>
         <ul>
+          <li>
+            <button id='workflows' onClick={this.handleWorkflowSelect}>Workflows</button>
+            <ul>
+              {this.props.graphs.map(graph => {
+                return <li key={graph.id}><button id={graph.id}>{this.props.graph.name}</button></li>
+              })}
+            </ul>
+          </li>
           <li><Link to='/'><button>Next</button></Link></li>
           <li><Link to='/graph'><button>Graph</button></Link></li>
         </ul>

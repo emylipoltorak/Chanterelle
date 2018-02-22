@@ -9,64 +9,54 @@ export default class AddBox extends Component {
 
   constructor (props) {
     super (props);
-    this.AddNode = this.AddNode.bind(this);
-    this.AddEdge = this.AddEdge.bind(this);
+    this.state = { name: '', description: '' }
+
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  AddNode () {
-    const newName = document.getElementById('addNode').value;
+  handleNameChange (e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleDescriptionChange (e) {
+    this.setState({description: e.target.value});
+  }
+
+  handleSubmit (e) {
+    e.preventDefault();
     axios({
       method: 'post',
       url: '/add-node/',
-      data:{name: newName, graph: this.props.graph.id},
+      data:{name: this.state.name, description: this.state.description, graph: this.props.graph.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
         "Authorization": authToken
       }
     })
       .then(response => {
-        document.getElementById('addNode').value = '';
+        this.setState({ name: '', description: '' })
         this.props.LoadGraph()
       }).catch(error => {
         console.log(error)
     })
   }
-
-  AddEdge () {
-    const source = document.getElementById('addEdgeSource').value;
-    const target = document.getElementById('addEdgeTarget').value;
-    axios({
-      method: 'post',
-      url: '/add-edge/',
-      data:{parent: source, child: target, graph: this.props.graph.id},
-      headers: {
-        "X-CSRFTOKEN": csrfToken,
-        "Authorization": authToken
-      }
-    })
-      .then(response => {
-        document.getElementById('addEdgeSource').value = '';
-        document.getElementById('addEdgeTarget').value = '';
-        this.props.LoadGraph()
-      }).catch(error => {
-        console.log(error)
-    })
-  }
-
 
   render () {
     return (
-      <div className='addBox'>
-        <h2>Task:</h2>
-        <input type='text' id='addNode' />
-        <button id='addNodeButton' onClick={this.AddNode}>Add</button>
-        <h2>Edge:</h2>
-        <h3>Source:</h3>
-        <input type='text' id='addEdgeSource' />
-        <h3>Target:</h3>
-        <input type='text' id='addEdgeTarget' />
-        <button id='addEdgeButton' onClick={this.AddEdge}>Add</button>
-      </div>
+      <form className='addBox' onSubmit={this.handleSubmit}>
+        <h1>{`{New Task}`}</h1>
+        <label id='name'>
+          Name:
+          <input type='text' value={this.state.name} onChange={this.handleNameChange} />
+        </label>
+        <label>
+          Description:
+          <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
+        </label>
+        <button type='submit' value='Submit'>Add</button>
+      </form>
     )
   }
 }
