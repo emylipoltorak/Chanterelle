@@ -2,7 +2,6 @@
 *.pyc
 node_modules/
 db.sqlite3
-assets/bundles
 *.save
 api/migrations
 # Elastic Beanstalk Files
