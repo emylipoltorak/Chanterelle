@@ -25,7 +25,10 @@ SECRET_KEY = 'xzcr(t=z!p*mj4vb08^y_8#*3!%ad1t)zw$a_41*aih-89j*bi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://chanterelle-dev.us-west-2.elasticbeanstalk.com/',
+    'http://chanterelle.io',
+]
 
 
 # Application definition
