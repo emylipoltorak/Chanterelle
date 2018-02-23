@@ -3,7 +3,7 @@ from api.models import DiGraph
 from api.serializers import DiGraphSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from django.http import JsonResponse
 import json
 from django.contrib.auth.models import User
@@ -32,7 +32,8 @@ class DiGraphList(APIView):
 class DiGraphByUser(APIView):
     def post(self, request, format=None):
         print(request.data)
-        graphs = DiGraph.objects.filter(owner__username = request.data['username'])
+        print(request.user)
+        graphs = DiGraph.objects.filter(owner__username = request.user)
         serializer = DiGraphSerializer(graphs, many=True)
         return Response(serializer.data)
 

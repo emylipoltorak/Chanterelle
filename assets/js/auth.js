@@ -1,6 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie'
 
+// Simple functions to handle token authentication with the backend. 
+
 const csrfToken = Cookies.get('csrftoken');
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';

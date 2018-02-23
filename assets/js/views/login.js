@@ -31,6 +31,7 @@ export default class LogIn extends Component {
         console.log(username);
         updateLogIn();
         updateUsername(username);
+        this.props.loadUserWorkflows(true);
       }
     })
   };

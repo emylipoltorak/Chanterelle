@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 // TODO: pass these values down as props to all children that use them. State?
 // Low priority, as the current method functions even if it could be cleaner.
 const csrfToken = Cookies.get('csrftoken');
-const authToken = 'Token ' + localStorage.token;
+let authToken = 'Token ' + localStorage.token;
 
 
 export default class App extends Component {
@@ -18,10 +18,11 @@ export default class App extends Component {
   constructor (props) {
     //set up default props and state, and bind all class methods to be passed down.
     super(props);
-    this.state = {workflows: {}, currentWorkflow: {}, isLoggedIn:true, username: 'Kimognome'};
+    this.state = {workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: ''};
     this.checkLogIn = this.checkLogIn.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
     this.loadWorkflow = this.loadWorkflow.bind(this);
+    this.loadUserWorkflows = this.loadUserWorkflows.bind(this);
     this.changeWorkflow = this.changeWorkflow.bind(this);
   }
 
@@ -29,28 +30,47 @@ export default class App extends Component {
     // check to see if the user is logged in, and load the user's workflows. If no user is logged in,
     // this should have no effect.
     console.log('componentWillMount ran');
-    this.loadUserWorkflows();
+    this.checkLogIn();
   }
 
-  loadUserWorkflows() {
+  componentDidMount() {
+    this.loadUserWorkflows(true);
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (!nextState.isLoggedIn && this.state.isLoggedIn !== nextState.isLoggedIn) {
+      this.setState({workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: ''})
+    };
+
+    if (nextState.isLoggedIn && this.state.isLoggedIn !== nextState.isLoggedIn) {
+      this.loadUserWorkflows(true);
+    }
+  }
+
+  loadUserWorkflows(initial) {
     // if the user is logged in, get all of their workflows from the database.
     // Set the global application state to hold their workflows and set the default workflow to
     // the most recently created one.
 
-    console.log('loadUserWorkflows ran')
+    initial = initial || false;
+
+    console.log('loadUserWorkflows ran');
     if (this.state.isLoggedIn) {
       axios({
         method: 'post',
         url: '/api/graphs-by-username/',
-        data:{username: this.state.username},
         headers: {
           "X-CSRFTOKEN": csrfToken,
           "Authorization": authToken
         }
       })
         .then(response => {
-          console.log(response.data[response.data.length-1]);
-          this.setState({workflows: response.data, currentWorkflow: response.data[response.data.length-1]});
+          console.log(response.data);
+          if (initial) {
+            this.setState({workflows: response.data, currentWorkflow: response.data[response.data.length-1], username: response.data[0].owner.username});
+          } else {
+            this.setState({workflows: response.data});
+          }
         })
         .catch(error => {
           console.log(error);
@@ -62,6 +82,7 @@ export default class App extends Component {
     // update state to reflect the current login status.
 
     console.log('checkLogIn ran');
+
     this.setState({isLoggedIn: auth.loggedIn()});
   }
 
@@ -74,8 +95,8 @@ export default class App extends Component {
     // changes the value of "currentWorkflow" in the application state, allowing users to switch
     // between workflows in both graph and next view.
     console.log('changeWorkflow ran');
-    console.log(newWorkFlow);
     this.setState({currentWorkflow: this.state.workflows.find(obj => {return obj.id == newWorkFlow})});
+    this.loadUserWorkflows();
   }
 
   loadWorkflow () {
@@ -94,6 +115,14 @@ export default class App extends Component {
       .then(result => {
         this.setState({currentWorkflow: result.data})
       })
+        .catch(error => {
+          console.log(error);
+        });
+  }
+
+  logOut() {
+    auth.logout();
+    this.setState({workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: ''});
   }
 
   render () {
@@ -102,9 +131,9 @@ export default class App extends Component {
     return (
       <div className='app'>
         <Header currentWorkflow={this.state.currentWorkflow} />
-        <AuthButtons isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} />
+        <AuthButtons isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn}  />
         {this.state.isLoggedIn ? <Navbar workflows={this.state.workflows} currentWorkflow={this.state.currentWorkflow} changeWorkflow={this.changeWorkflow} isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} /> : null }
-        {this.state.currentWorkflow.nodes ? <Main currentWorkflow={this.state.currentWorkflow} isLoggedIn={this.state.isLoggedIn} loadWorkflow={this.loadWorkflow} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} />: <main className='loading'>...</main>}
+        {(this.state.currentWorkflow.nodes || !this.state.isLoggedIn) ? <Main currentWorkflow={this.state.currentWorkflow} loadUserWorkflows={this.loadUserWorkflows} isLoggedIn={this.state.isLoggedIn} loadWorkflow={this.loadWorkflow} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} />: <main className='loading'>...</main>}
         <Footer />
       </div>
       )

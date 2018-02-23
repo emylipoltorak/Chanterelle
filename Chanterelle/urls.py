@@ -25,7 +25,7 @@ urlpatterns = [
     path('delete-node/', a_views.delete_node),
     path('delete-edge/', a_views.delete_edge),
     path('register-user/', a_views.register_user),
-    path('obtain-auth-token/', csrf_exempt(obtain_auth_token))
+    path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
 ]
 
 urlpatterns += router.urls

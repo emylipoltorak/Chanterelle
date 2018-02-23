@@ -58,8 +58,6 @@ export default class CyContainer extends Component {
   };
 
   componentDidMount () {
-    console.log('props: ');
-    console.log(this.props);
     cyConfig.container = this.refs.cy;
     cy = cytoscape(cyConfig);
     this.renderGraph(this.props.currentWorkflow);
@@ -126,7 +124,7 @@ export default class CyContainer extends Component {
               axios({
                 method: 'post',
                 url: '/delete-node/',
-                data: {node: ele.data('id'), graph: currentWorkflow.id},
+                data: {node: ele.data('id'), graph: graph.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
                   "Authorization": authToken
@@ -163,7 +161,7 @@ export default class CyContainer extends Component {
               axios({
                 method: 'post',
                 url: '/delete-edge/',
-                data: {parent: ele.data('source'), child: ele.data('target'), graph: currentWorkflow.id},
+                data: {parent: ele.data('source'), child: ele.data('target'), graph: graph.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
                   "Authorization": authToken

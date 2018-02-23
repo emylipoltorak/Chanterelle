@@ -9,6 +9,9 @@ import auth from './auth';
 
 
 class Main extends Component {
+  // the main content component. Returns the login page if a user is not logged in. If they are, returns
+  // whatever component the url specifies.
+  
   constructor (props) {
     super(props);
   }

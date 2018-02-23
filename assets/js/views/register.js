@@ -7,7 +7,7 @@ const csrfToken = Cookies.get('csrftoken');
 const authToken = 'Token ' + localStorage.token;
 
 export default class Register extends Component {
-
+// Give users a chance to create a new account.
   constructor(props) {
     super(props);
     this.state = {
@@ -21,6 +21,7 @@ export default class Register extends Component {
     this.handlePwChange = this.handlePwChange.bind(this);
   }
 
+  // event handlers for the three controlled text input components.
   handleNameChange(e) {
     this.setState({userName:e.target.value});
   }
@@ -34,6 +35,7 @@ export default class Register extends Component {
   }
 
   handleSubmit(e) {
+    // When the form is submitted, 
     e.preventDefault();
     document.querySelector('#userName').value='';
     document.querySelector('#pw1').value='';
