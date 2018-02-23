@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie'
 
-// Simple functions to handle token authentication with the backend. 
+// Simple functions to handle token authentication with the backend.
 
 const csrfToken = Cookies.get('csrftoken');
 
@@ -25,8 +25,8 @@ module.exports = {
     })
   },
 
-  logout: function() {
-    delete localStorage.token
+  logout: function(username) {
+    delete localStorage.token;
   },
 
   loggedIn: function() {
