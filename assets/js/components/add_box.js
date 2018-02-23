@@ -29,7 +29,7 @@ export default class AddBox extends Component {
     axios({
       method: 'post',
       url: '/add-node/',
-      data:{name: this.state.name, description: this.state.description, graph: this.props.graph.id},
+      data:{name: this.state.name, description: this.state.description, graph: this.props.currentWorkflow.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
         "Authorization": authToken
@@ -37,7 +37,7 @@ export default class AddBox extends Component {
     })
       .then(response => {
         this.setState({ name: '', description: '' })
-        this.props.LoadGraph()
+        this.props.loadWorkflow()
       }).catch(error => {
         console.log(error)
     })

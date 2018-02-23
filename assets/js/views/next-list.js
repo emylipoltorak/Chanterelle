@@ -16,18 +16,18 @@ export default class NextList extends Component {
   }
 
   componentWillMount() {
-    this.getNext(this.props.graph);
+    this.getNext(this.props.currentWorkflow);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.graph !== nextProps.graph) {
-      this.getNext(nextProps.graph);
+    if (this.props.currentWorkflow !== nextProps.currentWorkflow) {
+      this.getNext(nextProps.currentWorkflow);
     }
   }
 
-  getNext(graph) {
+  getNext(workflow) {
     const next = []
-    graph.nodes.forEach(node => {
+    workflow.nodes.forEach(node => {
       if (node.in_degree === 1) {
         next.push(node)
       };
@@ -46,7 +46,7 @@ export default class NextList extends Component {
     axios({
       method: 'post',
       url: '/delete-node/',
-      data: {node: node, graph: this.props.graph.id},
+      data: {node: node, graph: this.props.currentWorkflow.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
         "Authorization": authToken
@@ -54,7 +54,7 @@ export default class NextList extends Component {
     })
       .then(response => {
         console.log(response);
-        this.props.LoadGraph()
+        this.props.loadWorkflow();
       }).catch(error => {
         console.log(error)
     })

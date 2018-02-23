@@ -31,10 +31,16 @@ class DiGraphList(APIView):
 
 class DiGraphByUser(APIView):
     def post(self, request, format=None):
-        graphs = Digraph.objects.filter(owner__username = request.username)
+        print(request.data)
+        graphs = DiGraph.objects.filter(owner__username = request.data['username'])
         serializer = DiGraphSerializer(graphs, many=True)
         return Response(serializer.data)
 
+class DiGraphByID(APIView):
+    def post(self, request, format=None):
+        graphs = DiGraph.objects.get(pk=request.data['id'])
+        serializer = DiGraphSerializer(graphs, many=False)
+        return Response(serializer.data)
 
 def add_node(request):
     if request.method == 'POST':

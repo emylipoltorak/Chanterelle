@@ -22,14 +22,15 @@ export default class LogIn extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    document.getElementById('userName').value='';
-    document.getElementById('pw').value='';
     const updateLogIn = this.props.checkLogIn;
     const updateUsername = this.props.updateUsername;
-    auth.login(this.state.userName, this.state.pw,(loggedIn) => {
+    const username = this.state.userName;
+    const password = this.state.pw;
+    auth.login(username, password,(loggedIn) => {
       if (loggedIn) {
+        console.log(username);
         updateLogIn();
-        updateUsername(this.state.userName);
+        updateUsername(username);
       }
     })
   };

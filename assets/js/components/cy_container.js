@@ -58,16 +58,17 @@ export default class CyContainer extends Component {
   };
 
   componentDidMount () {
-    console.log('componentDidMount');
+    console.log('props: ');
+    console.log(this.props);
     cyConfig.container = this.refs.cy;
     cy = cytoscape(cyConfig);
-    this.renderGraph(this.props.graph);
+    this.renderGraph(this.props.currentWorkflow);
   };
 
   componentWillReceiveProps (nextProps) {
     console.log('componentWillReceiveProps')
-    if (this.props.graph !== nextProps.graph) {
-      this.renderGraph(nextProps.graph);
+    if (this.props.currentWorkflow !== nextProps.currentWorkflow) {
+      this.renderGraph(nextProps.currentWorkflow);
     }
   };
 
@@ -125,14 +126,14 @@ export default class CyContainer extends Component {
               axios({
                 method: 'post',
                 url: '/delete-node/',
-                data: {node: ele.data('id'), graph: graph.id},
+                data: {node: ele.data('id'), graph: currentWorkflow.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
                   "Authorization": authToken
                 }
               })
                 .then(response => {
-                  this.props.LoadGraph()
+                  this.props.loadWorkflow()
                 }).catch(error => {
                   console.log(error)
               })
@@ -162,14 +163,14 @@ export default class CyContainer extends Component {
               axios({
                 method: 'post',
                 url: '/delete-edge/',
-                data: {parent: ele.data('source'), child: ele.data('target'), graph: graph.id},
+                data: {parent: ele.data('source'), child: ele.data('target'), graph: currentWorkflow.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
                   "Authorization": authToken
                 }
               })
                 .then(response => {
-                  this.props.LoadGraph();
+                  this.props.loadWorkflow();
                 }).catch(error => {
                   console.log(error);
               })
@@ -195,14 +196,14 @@ export default class CyContainer extends Component {
         axios({
           method: 'post',
           url: '/add-edge/',
-          data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.graph.id},
+          data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.currentWorkflow.id},
           headers: {
             "X-CSRFTOKEN": csrfToken,
             "Authorization": authToken
           }
         })
           .then(response => {
-            this.props.LoadGraph()
+            this.props.loadWorkflow();
           }).catch(error => {
             console.log(error)
         })
