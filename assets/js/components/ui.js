@@ -10,11 +10,11 @@ class Header extends Component {
   }
 
   render () {
-    if (this.props.graph.name) {
+    if (this.props.currentWorkflow.name) {
       return (
         <header>
           <h1>Chanter<span>elle</span></h1>
-          <h2>{`{${this.props.graph.name}}`}</h2>
+          <h2>{`{${this.props.currentWorkflow.name}}`}</h2>
         </header>
       )
     }
@@ -60,7 +60,7 @@ class Navbar extends Component {
   }
 
   handleWorkflowSelect(e) {
-    this.updateWorkflow(e.target.id);
+    this.props.changeWorkflow(e.target.id);
   }
 
   render() {
@@ -69,12 +69,16 @@ class Navbar extends Component {
         <i className="fas fa-code-branch fa-rotate-180"></i>
         <ul>
           <li>
-            <button id='workflows' onClick={this.handleWorkflowSelect}>Workflows</button>
-            <ul>
-              {this.props.graphs.map(graph => {
-                return <li key={graph.id}><button id={graph.id}>{this.props.graph.name}</button></li>
-              })}
-            </ul>
+            <button id='workflows'>Workflows</button>
+            {
+              this.props.workflows[0] ?
+              <ul>
+                {this.props.workflows.map(workflow => {
+                  return <li key={workflow.id}><button id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</button></li>
+                }
+              )}
+              </ul> : null
+            }
           </li>
           <li><Link to='/'><button>Next</button></Link></li>
           <li><Link to='/graph'><button>Graph</button></Link></li>

@@ -23,10 +23,10 @@ export default class Graph extends Component {
     const { open } = this.state;
     return (
       <main className='graph'>
-        <CyContainer graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
+        <CyContainer currentWorkflow={this.props.currentWorkflow} loadWorkflow={this.props.loadWorkflow} />
         <button className='add' onClick={this.showAddBox}>Add a Task</button>
         <CustomAnimation open={open} onClose={this.hideAddBox} little>
-          <AddBox graph={this.props.graph} LoadGraph={this.props.LoadGraph} />
+          <AddBox currentWorkflow={this.props.currentWorkflow} loadWorkflow={this.props.loadWorkflow} />
         </CustomAnimation>
       </main>
     )};

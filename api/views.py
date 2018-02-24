@@ -3,7 +3,7 @@ from api.models import DiGraph
 from api.serializers import DiGraphSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, generics
 from django.http import JsonResponse
 import json
 from django.contrib.auth.models import User
@@ -31,10 +31,15 @@ class DiGraphList(APIView):
 
 class DiGraphByUser(APIView):
     def post(self, request, format=None):
-        graphs = Digraph.objects.filter(owner__username = request.username)
+        graphs = DiGraph.objects.filter(owner__username = request.user.username)
         serializer = DiGraphSerializer(graphs, many=True)
         return Response(serializer.data)
 
+class DiGraphByID(APIView):
+    def post(self, request, format=None):
+        graphs = DiGraph.objects.get(pk=request.data['id'])
+        serializer = DiGraphSerializer(graphs, many=False)
+        return Response(serializer.data)
 
 def add_node(request):
     if request.method == 'POST':
@@ -51,7 +56,6 @@ def add_node(request):
 def delete_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
-        print(data)
         graph = DiGraph.objects.get(pk=data['graph'])
         node = graph.nodes.all().get(pk=data['node'])
         graph.delete_node(node)
@@ -88,10 +92,13 @@ def register_user(request):
         data = json.loads(request.body.decode('utf-8'))
         username = data['username']
         password = data['password']
-        print('username: {}, password: {}'.format(username, password))
         user = User.objects.create_user(username=username, password=password)
         user.save()
         graph = DiGraph(name="{}'s Tasks".format(username.title()), owner=user)
         graph.save()
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def logout_user(request):
+    logout(request.user)
+    return JsonResponse({'message': 'user was logged out'})

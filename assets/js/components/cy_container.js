@@ -27,11 +27,11 @@ const cyConfig = {
         'color': '#2C2029',
         'text-valign':'center',
         'text-halign': 'center',
-        'font-size': '20',
+        'font-size': '15',
         'font-family': 'Nixie One, cursive',
         'shape': 'roundrectangle',
-        'background-color': 'mapData(inDegree, 1, 5, rgba(163, 154, 164), rgba(240, 146, 60))',
-        'background-opacity': 'mapData(inDegree, 1, 5, .3, 1)',
+        'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
+        'background-opacity': 'mapData(inDegree, 1, 8, .3, 1)',
         'border-color': 'transparent',
         'width': 'label',
         'height': 'label',
@@ -58,16 +58,15 @@ export default class CyContainer extends Component {
   };
 
   componentDidMount () {
-    console.log('componentDidMount');
     cyConfig.container = this.refs.cy;
     cy = cytoscape(cyConfig);
-    this.renderGraph(this.props.graph);
+    this.renderGraph(this.props.currentWorkflow);
   };
 
   componentWillReceiveProps (nextProps) {
     console.log('componentWillReceiveProps')
-    if (this.props.graph !== nextProps.graph) {
-      this.renderGraph(nextProps.graph);
+    if (this.props.currentWorkflow !== nextProps.currentWorkflow) {
+      this.renderGraph(nextProps.currentWorkflow);
     }
   };
 
@@ -86,7 +85,8 @@ export default class CyContainer extends Component {
           name: node.name,
           inDegree: node.in_degree,
           outDegree: node.out_degree,
-          deepest: graph.nodes.length
+          deepest: graph.nodes.length,
+          debugLabel: node.name + ': ' + node.in_degree
         }
       })
     });
@@ -132,7 +132,7 @@ export default class CyContainer extends Component {
                 }
               })
                 .then(response => {
-                  this.props.LoadGraph()
+                  this.props.loadWorkflow()
                 }).catch(error => {
                   console.log(error)
               })
@@ -169,7 +169,7 @@ export default class CyContainer extends Component {
                 }
               })
                 .then(response => {
-                  this.props.LoadGraph();
+                  this.props.loadWorkflow();
                 }).catch(error => {
                   console.log(error);
               })
@@ -195,14 +195,14 @@ export default class CyContainer extends Component {
         axios({
           method: 'post',
           url: '/add-edge/',
-          data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.graph.id},
+          data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.currentWorkflow.id},
           headers: {
             "X-CSRFTOKEN": csrfToken,
             "Authorization": authToken
           }
         })
           .then(response => {
-            this.props.LoadGraph()
+            this.props.loadWorkflow();
           }).catch(error => {
             console.log(error)
         })

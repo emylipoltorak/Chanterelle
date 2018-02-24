@@ -19,12 +19,14 @@ urlpatterns = [
     path('', a_views.home),
     path('api/', a_views.DiGraphList.as_view()),
     path('api/graphs-by-username/', a_views.DiGraphByUser.as_view()),
+    path('api/graph-by-id/', a_views.DiGraphByID.as_view()),
     path('add-node/', a_views.add_node),
     path('add-edge/', a_views.add_edge),
     path('delete-node/', a_views.delete_node),
     path('delete-edge/', a_views.delete_edge),
     path('register-user/', a_views.register_user),
-    path('obtain-auth-token/', csrf_exempt(obtain_auth_token))
+    path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
+    path('logout/', a_views.logout_user),
 ]
 
 urlpatterns += router.urls
