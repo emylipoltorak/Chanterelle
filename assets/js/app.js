@@ -65,7 +65,8 @@ export default class App extends Component {
         }
       })
         .then(response => {
-          console.log(response.data);
+          console.log(`response: ${response}`)
+          console.log(`workflows: ${response.data}`);
           if (initial) {
             this.setState({workflows: response.data, currentWorkflow: response.data[response.data.length-1], username: response.data[0].owner.username});
           } else {
