@@ -1,1 +1,1 @@
-{"status":"done","chunks":{"main":[{"name":"main-b39acbf53933c4f9624a.js","path":"/Users/emylipoltorak/Projects/Chanterelle/assets/bundles/main-b39acbf53933c4f9624a.js"}]},"error":"ModuleNotFoundError","message":"Module not found: Error: Can't resolve '../css/style.css' in '/Users/emylipoltorak/Projects/Chanterelle/assets/js/components'"}
+{"status":"done","chunks":{"main":[{"name":"main-6b04e7ba3059c22e6227.js","path":"/Users/emylipoltorak/Projects/Chanterelle/assets/bundles/main-6b04e7ba3059c22e6227.js"}]}}
