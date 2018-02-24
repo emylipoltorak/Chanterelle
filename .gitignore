@@ -3,7 +3,6 @@
 node_modules/
 db.sqlite3
 *.save
-api/migrations
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

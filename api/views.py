@@ -7,7 +7,6 @@ from rest_framework import viewsets, permissions, status, generics
 from django.http import JsonResponse
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import logout
 
 
 def home(request):
