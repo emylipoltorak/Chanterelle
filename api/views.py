@@ -31,7 +31,7 @@ class DiGraphList(APIView):
 
 class DiGraphByUser(APIView):
     def post(self, request, format=None):
-        graphs = DiGraph.objects.filter(owner__username = request.user)
+        graphs = DiGraph.objects.filter(owner__username = request.user.username)
         serializer = DiGraphSerializer(graphs, many=True)
         return Response(serializer.data)
 
