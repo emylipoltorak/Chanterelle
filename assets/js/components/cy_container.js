@@ -27,11 +27,11 @@ const cyConfig = {
         'color': '#2C2029',
         'text-valign':'center',
         'text-halign': 'center',
-        'font-size': '20',
+        'font-size': '15',
         'font-family': 'Nixie One, cursive',
         'shape': 'roundrectangle',
-        'background-color': 'mapData(inDegree, 1, 5, rgba(163, 154, 164), rgba(240, 146, 60))',
-        'background-opacity': 'mapData(inDegree, 1, 5, .3, 1)',
+        'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
+        'background-opacity': 'mapData(inDegree, 1, 8, .3, 1)',
         'border-color': 'transparent',
         'width': 'label',
         'height': 'label',
@@ -85,7 +85,8 @@ export default class CyContainer extends Component {
           name: node.name,
           inDegree: node.in_degree,
           outDegree: node.out_degree,
-          deepest: graph.nodes.length
+          deepest: graph.nodes.length,
+          debugLabel: node.name + ': ' + node.in_degree
         }
       })
     });

@@ -111,6 +111,7 @@ class DiGraph(models.Model):
     def remove_edge(self, a, b):
         # assume that a and b are nodes on this graph and there exists an edge a --> b
         print('remove edge ran')
+        root = self.nodes.all().get(name="root")
         for u in self.edges():
             if u.parent == a and u.child == b:
                 print('the edge exists')
@@ -118,6 +119,8 @@ class DiGraph(models.Model):
                 a.save()
                 b.save()
                 print('the edge was deleted')
+        if root not in b.ancestors_set():
+            self.add_edge(root, b)
 
     def add_edge(self, a, b):
         # assuming that a and b are nodes on this graph, add an edge a --> b
