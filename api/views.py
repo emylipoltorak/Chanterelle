@@ -94,7 +94,7 @@ def register_user(request):
         password = data['password']
         user = User.objects.create_user(username=username, password=password)
         user.save()
-        graph = DiGraph(name="{}'s Tasks".format(username.title()), owner=user)
+        graph = DiGraph(name="{}'s Tasks".format(username), owner=user)
         graph.save()
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})

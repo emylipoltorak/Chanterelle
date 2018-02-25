@@ -4,7 +4,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 
 const csrfToken = Cookies.get('csrftoken');
-const authToken = 'Token ' + localStorage.token;
 
 export default class Register extends Component {
 // Give users a chance to create a new account.
@@ -35,7 +34,7 @@ export default class Register extends Component {
   }
 
   handleSubmit(e) {
-    // When the form is submitted, 
+    // When the form is submitted,
     e.preventDefault();
     document.querySelector('#userName').value='';
     document.querySelector('#pw1').value='';
@@ -70,7 +69,6 @@ export default class Register extends Component {
   };
 
   render() {
-    console.log(this.state.buttonDisabled);
     return (
       <form className='authForm' onSubmit={this.handleSubmit}>
         <h2>Register</h2>

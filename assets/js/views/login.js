@@ -28,7 +28,6 @@ export default class LogIn extends Component {
     const password = this.state.pw;
     auth.login(username, password,(loggedIn) => {
       if (loggedIn) {
-        console.log(username);
         updateLogIn();
         updateUsername(username);
         this.props.loadUserWorkflows(true);

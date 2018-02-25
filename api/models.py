@@ -126,18 +126,29 @@ class DiGraph(models.Model):
         # assuming that a and b are nodes on this graph, add an edge a --> b
         if not a in b.ancestors_set():
             a.add_child(b)
-            print('an edge was created')
+            print('The edge {}, {} was created.'.format(a, b))
             a.save()
             b.save()
             for i in a.ancestors_set():
+                print(a.ancestors_set())
                 if b in i.descendants_set():
-                    print('The edge {}, {} should be removed'.format(i,b))
+                    print('checking {}, {}.'.format(i, b))
+                    print('The edge {}, {} should be removed.'.format(i,b))
                     self.remove_edge(i, b)
                     i.save()
                     b.save()
                     print('The edge {}, {} was removed.'.format(i,b))
+            for i in b.descendants_set():
+                print('checking {}, {}.'.format(a, i))
+                for u in self.edges():
+                    if u.parent == a and u.child == i:
+                        print('The edge {}, {} should be removed.'.format(a, i))
+                        self.remove_edge(a, i)
+                        i.save()
+                        a.save()
+
         else:
-            print('{} is already an ancestor of {}'.format(a,b))
+            print('{} is already an ancestor of {}.'.format(a,b))
 
     def __str__(self):
         return self.name
