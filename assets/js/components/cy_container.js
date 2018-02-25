@@ -8,7 +8,6 @@ const $ = require('jquery');
 import Cookies from 'js-cookie';
 
 const csrfToken = Cookies.get('csrftoken');
-const authToken = 'Token '+localStorage.token;
 
 
 cyqtip( cytoscape );
@@ -64,10 +63,9 @@ export default class CyContainer extends Component {
   };
 
   componentWillReceiveProps (nextProps) {
-    console.log('componentWillReceiveProps')
-    if (this.props.currentWorkflow !== nextProps.currentWorkflow) {
-      this.renderGraph(nextProps.currentWorkflow);
-    }
+    console.log('componentWillReceiveProps ran in cyContainer');
+    console.log(nextProps.currentWorkflow);
+    this.renderGraph(nextProps.currentWorkflow);
   };
 
   componentWillUnmount () {
@@ -75,9 +73,9 @@ export default class CyContainer extends Component {
   }
 
   renderGraph(graph) {
+    console.log('renderGraph ran');
     cy.destroy();
     cy = cytoscape(cyConfig);
-    console.log('renderGraph');
     graph.nodes.forEach(node => {
       cy.add({
         data: {
@@ -128,11 +126,11 @@ export default class CyContainer extends Component {
                 data: {node: ele.data('id'), graph: graph.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
-                  "Authorization": authToken
+                  "Authorization": 'Token ' + localStorage.token
                 }
               })
                 .then(response => {
-                  this.props.loadWorkflow()
+                  this.props.loadUserWorkflows(false)
                 }).catch(error => {
                   console.log(error)
               })
@@ -165,11 +163,11 @@ export default class CyContainer extends Component {
                 data: {parent: ele.data('source'), child: ele.data('target'), graph: graph.id},
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
-                  "Authorization": authToken
+                  "Authorization": 'Token ' + localStorage.token
                 }
               })
                 .then(response => {
-                  this.props.loadWorkflow();
+                  this.props.loadUserWorkflows(false);
                 }).catch(error => {
                   console.log(error);
               })
@@ -191,18 +189,18 @@ export default class CyContainer extends Component {
       eh.enableDrawMode();
 
       cy.on('ehcomplete', (e, sourceNode, targetNode, addedEles) => {
-        console.log('edge handle complete');
         axios({
           method: 'post',
           url: '/add-edge/',
           data:{parent: sourceNode.data('id'), child: targetNode.data('id'), graph: this.props.currentWorkflow.id},
           headers: {
             "X-CSRFTOKEN": csrfToken,
-            "Authorization": authToken
+            "Authorization": 'Token ' + localStorage.token
           }
         })
           .then(response => {
-            this.props.loadWorkflow();
+            console.log('Edge should be created now. Calling loadUserWorkflows.')
+            this.props.loadUserWorkflows(false);
           }).catch(error => {
             console.log(error)
         })

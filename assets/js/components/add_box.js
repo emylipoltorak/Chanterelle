@@ -3,7 +3,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 
 const csrfToken = Cookies.get('csrftoken');
-const authToken = 'Token ' + localStorage.token;
 
 export default class AddBox extends Component {
 
@@ -32,12 +31,12 @@ export default class AddBox extends Component {
       data:{name: this.state.name, description: this.state.description, graph: this.props.currentWorkflow.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
-        "Authorization": authToken
+        "Authorization": 'Token ' + localStorage.token
       }
     })
       .then(response => {
         this.setState({ name: '', description: '' })
-        this.props.loadWorkflow()
+        this.props.loadUserWorkflows(false);
       }).catch(error => {
         console.log(error)
     })

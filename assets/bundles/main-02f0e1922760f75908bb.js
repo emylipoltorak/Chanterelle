@@ -37132,7 +37132,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // TODO: pass these values down as props to all children that use them. State?
 // Low priority, as the current method functions even if it could be cleaner.
 var csrfToken = _jsCookie2.default.get('csrftoken');
-var authToken = 'Token ' + localStorage.token;
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -37149,7 +37148,6 @@ var App = function (_Component) {
     _this.state = { workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: '' };
     _this.checkLogIn = _this.checkLogIn.bind(_this);
     _this.updateUsername = _this.updateUsername.bind(_this);
-    _this.loadWorkflow = _this.loadWorkflow.bind(_this);
     _this.loadUserWorkflows = _this.loadUserWorkflows.bind(_this);
     _this.changeWorkflow = _this.changeWorkflow.bind(_this);
     return _this;
@@ -37160,7 +37158,6 @@ var App = function (_Component) {
     value: function componentWillMount() {
       // check to see if the user is logged in, and load the user's workflows. If no user is logged in,
       // this should have no effect.
-      console.log('componentWillMount ran');
       this.checkLogIn();
     }
   }, {
@@ -37188,24 +37185,25 @@ var App = function (_Component) {
       // Set the global application state to hold their workflows and set the default workflow to
       // the most recently created one.
 
+      console.log('loadUserWorkflows ran. Initial: ' + initial);
+
       initial = initial || false;
 
-      console.log('loadUserWorkflows ran');
       if (this.state.isLoggedIn) {
         (0, _axios2.default)({
           method: 'post',
           url: '/api/graphs-by-username/',
           headers: {
             "X-CSRFTOKEN": csrfToken,
-            "Authorization": authToken
+            "Authorization": 'Token ' + localStorage.token
           }
         }).then(function (response) {
-          console.dir(response);
-          console.log('workflows: ' + response.data);
           if (initial) {
             _this2.setState({ workflows: response.data, currentWorkflow: response.data[response.data.length - 1], username: response.data[0].owner.username });
           } else {
-            _this2.setState({ workflows: response.data });
+            _this2.setState({ workflows: response.data, currentWorkflow: response.data.find(function (obj) {
+                return obj.id == _this2.state.currentWorkflow.id;
+              }) });
           }
         }).catch(function (error) {
           console.log(error);
@@ -37217,14 +37215,11 @@ var App = function (_Component) {
     value: function checkLogIn() {
       // update state to reflect the current login status.
 
-      console.log('checkLogIn ran');
-
       this.setState({ isLoggedIn: _auth2.default.loggedIn() });
     }
   }, {
     key: 'updateUsername',
     value: function updateUsername(username) {
-      console.log('updateUsername ran');
       this.setState({ username: username });
     }
   }, {
@@ -37232,33 +37227,10 @@ var App = function (_Component) {
     value: function changeWorkflow(newWorkFlow) {
       // changes the value of "currentWorkflow" in the application state, allowing users to switch
       // between workflows in both graph and next view.
-      console.log('changeWorkflow ran');
       this.setState({ currentWorkflow: this.state.workflows.find(function (obj) {
           return obj.id == newWorkFlow;
         }) });
-      this.loadUserWorkflows();
-    }
-  }, {
-    key: 'loadWorkflow',
-    value: function loadWorkflow() {
-      var _this3 = this;
-
-      // re-loads the current workflow from the database to reflect changes.
-
-      console.log('loadWorkflow ran');
-      (0, _axios2.default)({
-        method: 'post',
-        url: '/api/graph-by-id/',
-        data: { id: this.state.currentWorkflow.id },
-        headers: {
-          "X-CSRFTOKEN": csrfToken,
-          "Authorization": authToken
-        }
-      }).then(function (result) {
-        _this3.setState({ currentWorkflow: result.data });
-      }).catch(function (error) {
-        console.log(error);
-      });
+      this.loadUserWorkflows(false);
     }
   }, {
     key: 'logOut',
@@ -37269,15 +37241,13 @@ var App = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log('render ran in app');
-      console.log(this.state);
       return _react2.default.createElement(
         'div',
         { className: 'app' },
         _react2.default.createElement(_ui.Header, { currentWorkflow: this.state.currentWorkflow }),
-        _react2.default.createElement(_ui.AuthButtons, { isLoggedIn: this.state.isLoggedIn, checkLogIn: this.checkLogIn }),
+        _react2.default.createElement(_ui.AuthButtons, { isLoggedIn: this.state.isLoggedIn, checkLogIn: this.checkLogIn, loadUserWorkflows: this.loadUserWorkflows }),
         this.state.isLoggedIn ? _react2.default.createElement(_ui.Navbar, { workflows: this.state.workflows, currentWorkflow: this.state.currentWorkflow, changeWorkflow: this.changeWorkflow, isLoggedIn: this.state.isLoggedIn, username: this.state.username, updateUsername: this.updateUsername }) : null,
-        this.state.currentWorkflow.nodes || !this.state.isLoggedIn ? _react2.default.createElement(_main.Main, { currentWorkflow: this.state.currentWorkflow, loadUserWorkflows: this.loadUserWorkflows, isLoggedIn: this.state.isLoggedIn, loadWorkflow: this.loadWorkflow, checkLogIn: this.checkLogIn, username: this.state.username, updateUsername: this.updateUsername }) : _react2.default.createElement(
+        this.state.currentWorkflow.nodes || !this.state.isLoggedIn ? _react2.default.createElement(_main.Main, { currentWorkflow: this.state.currentWorkflow, loadUserWorkflows: this.loadUserWorkflows, isLoggedIn: this.state.isLoggedIn, checkLogIn: this.checkLogIn, username: this.state.username, updateUsername: this.updateUsername }) : _react2.default.createElement(
           'main',
           { className: 'loading' },
           '...'
@@ -38606,7 +38576,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var csrfToken = _jsCookie2.default.get('csrftoken');
-var authToken = 'Token ' + localStorage.token;
 
 var NextList = function (_Component) {
   _inherits(NextList, _Component);
@@ -38657,18 +38626,16 @@ var NextList = function (_Component) {
       // Then, it should delete the node from the database and run LoadGraph.
       // LoadGraph should trigger a re-render of the list, with any new items in place.
       var node = e.currentTarget.id;
-      console.log(node);
       (0, _axios2.default)({
         method: 'post',
         url: '/delete-node/',
         data: { node: node, graph: this.props.currentWorkflow.id },
         headers: {
           "X-CSRFTOKEN": csrfToken,
-          "Authorization": authToken
+          "Authorization": 'Token ' + localStorage.token
         }
       }).then(function (response) {
-        console.log(response);
-        _this2.props.loadWorkflow();
+        _this2.props.loadUserWorkflows(false);
       }).catch(function (error) {
         console.log(error);
       });
@@ -38772,7 +38739,6 @@ var LogIn = function (_Component) {
       var password = this.state.pw;
       _auth2.default.login(username, password, function (loggedIn) {
         if (loggedIn) {
-          console.log(username);
           updateLogIn();
           updateUsername(username);
           _this2.props.loadUserWorkflows(true);
@@ -38850,7 +38816,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var csrfToken = _jsCookie2.default.get('csrftoken');
-var authToken = 'Token ' + localStorage.token;
 
 var Register = function (_Component) {
   _inherits(Register, _Component);
@@ -38895,7 +38860,7 @@ var Register = function (_Component) {
     value: function handleSubmit(e) {
       var _this2 = this;
 
-      // When the form is submitted, 
+      // When the form is submitted,
       e.preventDefault();
       document.querySelector('#userName').value = '';
       document.querySelector('#pw1').value = '';
@@ -38931,7 +38896,6 @@ var Register = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.state.buttonDisabled);
       return _react2.default.createElement(
         'form',
         { className: 'authForm', onSubmit: this.handleSubmit },
@@ -39037,7 +39001,7 @@ var Graph = function (_Component) {
       return _react2.default.createElement(
         'main',
         { className: 'graph' },
-        _react2.default.createElement(_cy_container2.default, { currentWorkflow: this.props.currentWorkflow, loadWorkflow: this.props.loadWorkflow }),
+        _react2.default.createElement(_cy_container2.default, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows }),
         _react2.default.createElement(
           'button',
           { className: 'add', onClick: this.showAddBox },
@@ -39046,7 +39010,7 @@ var Graph = function (_Component) {
         _react2.default.createElement(
           _reactResponsiveModal2.default,
           { open: open, onClose: this.hideAddBox, little: true },
-          _react2.default.createElement(_add_box2.default, { currentWorkflow: this.props.currentWorkflow, loadWorkflow: this.props.loadWorkflow })
+          _react2.default.createElement(_add_box2.default, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows })
         )
       );
     }
@@ -39110,7 +39074,6 @@ var $ = __webpack_require__(41);
 
 
 var csrfToken = _jsCookie2.default.get('csrftoken');
-var authToken = 'Token ' + localStorage.token;
 
 (0, _cytoscapeQtip2.default)(_cytoscape2.default);
 _cytoscape2.default.use(_cytoscapeDagre2.default);
@@ -39123,7 +39086,7 @@ var cyConfig = {
   style: [{
     selector: 'node',
     style: {
-      'label': 'data(label)',
+      'label': 'data(name)',
       'color': '#2C2029',
       'text-valign': 'center',
       'text-halign': 'center',
@@ -39172,10 +39135,9 @@ var CyContainer = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      console.log('componentWillReceiveProps');
-      if (this.props.currentWorkflow !== nextProps.currentWorkflow) {
-        this.renderGraph(nextProps.currentWorkflow);
-      }
+      console.log('componentWillReceiveProps ran in cyContainer');
+      console.log(nextProps.currentWorkflow);
+      this.renderGraph(nextProps.currentWorkflow);
     }
   }, {
     key: 'componentWillUnmount',
@@ -39187,9 +39149,9 @@ var CyContainer = function (_Component) {
     value: function renderGraph(graph) {
       var _this2 = this;
 
+      console.log('renderGraph ran');
       cy.destroy();
       cy = (0, _cytoscape2.default)(cyConfig);
-      console.log('renderGraph');
       graph.nodes.forEach(function (node) {
         cy.add({
           data: {
@@ -39197,8 +39159,8 @@ var CyContainer = function (_Component) {
             name: node.name,
             inDegree: node.in_degree,
             outDegree: node.out_degree,
-            deepest: graph.nodes.length
-
+            deepest: graph.nodes.length,
+            debugLabel: node.name + ': ' + node.in_degree
           }
         });
       });
@@ -39213,7 +39175,7 @@ var CyContainer = function (_Component) {
         });
       });
 
-      // cy.elements('[name="root"]').remove();
+      cy.elements('[name="root"]').remove();
 
       var island = cy.nodes().roots().leaves();
       var nonIsland = cy.nodes(!island);
@@ -39240,10 +39202,10 @@ var CyContainer = function (_Component) {
                 data: { node: ele.data('id'), graph: graph.id },
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
-                  "Authorization": authToken
+                  "Authorization": 'Token ' + localStorage.token
                 }
               }).then(function (response) {
-                _this2.props.loadWorkflow();
+                _this2.props.loadUserWorkflows(false);
               }).catch(function (error) {
                 console.log(error);
               });
@@ -39276,10 +39238,10 @@ var CyContainer = function (_Component) {
                 data: { parent: ele.data('source'), child: ele.data('target'), graph: graph.id },
                 headers: {
                   "X-CSRFTOKEN": csrfToken,
-                  "Authorization": authToken
+                  "Authorization": 'Token ' + localStorage.token
                 }
               }).then(function (response) {
-                _this2.props.loadWorkflow();
+                _this2.props.loadUserWorkflows(false);
               }).catch(function (error) {
                 console.log(error);
               });
@@ -39301,17 +39263,17 @@ var CyContainer = function (_Component) {
       eh.enableDrawMode();
 
       cy.on('ehcomplete', function (e, sourceNode, targetNode, addedEles) {
-        console.log('edge handle complete');
         (0, _axios2.default)({
           method: 'post',
           url: '/add-edge/',
           data: { parent: sourceNode.data('id'), child: targetNode.data('id'), graph: _this2.props.currentWorkflow.id },
           headers: {
             "X-CSRFTOKEN": csrfToken,
-            "Authorization": authToken
+            "Authorization": 'Token ' + localStorage.token
           }
         }).then(function (response) {
-          _this2.props.loadWorkflow();
+          console.log('Edge should be created now. Calling loadUserWorkflows.');
+          _this2.props.loadUserWorkflows(false);
         }).catch(function (error) {
           console.log(error);
         });
@@ -102934,7 +102896,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var csrfToken = _jsCookie2.default.get('csrftoken');
-var authToken = 'Token ' + localStorage.token;
 
 var AddBox = function (_Component) {
   _inherits(AddBox, _Component);
@@ -102974,11 +102935,11 @@ var AddBox = function (_Component) {
         data: { name: this.state.name, description: this.state.description, graph: this.props.currentWorkflow.id },
         headers: {
           "X-CSRFTOKEN": csrfToken,
-          "Authorization": authToken
+          "Authorization": 'Token ' + localStorage.token
         }
       }).then(function (response) {
         _this2.setState({ name: '', description: '' });
-        _this2.props.loadWorkflow();
+        _this2.props.loadUserWorkflows(false);
       }).catch(function (error) {
         console.log(error);
       });

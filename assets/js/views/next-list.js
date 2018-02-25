@@ -3,7 +3,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const csrfToken = Cookies.get('csrftoken');
-const authToken = 'Token '+localStorage.token;
 
 
 export default class NextList extends Component {
@@ -42,19 +41,17 @@ export default class NextList extends Component {
     // Then, it should delete the node from the database and run LoadGraph.
     // LoadGraph should trigger a re-render of the list, with any new items in place.
     const node = e.currentTarget.id;
-    console.log(node);
     axios({
       method: 'post',
       url: '/delete-node/',
       data: {node: node, graph: this.props.currentWorkflow.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
-        "Authorization": authToken
+        "Authorization": 'Token ' + localStorage.token
       }
     })
       .then(response => {
-        console.log(response);
-        this.props.loadWorkflow();
+        this.props.loadUserWorkflows(false);
       }).catch(error => {
         console.log(error)
     })
