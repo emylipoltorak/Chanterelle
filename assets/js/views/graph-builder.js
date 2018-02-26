@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CyContainer from '../components/cy_container';
-import AddBox from '../components/add_box';
+import AddNodeBox from '../components/add_box';
 import CustomAnimation from 'react-responsive-modal';
 
 export default class Graph extends Component {
@@ -26,7 +26,7 @@ export default class Graph extends Component {
         <CyContainer currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} />
         <button className='add' onClick={this.showAddBox}>Add a Task</button>
         <CustomAnimation open={open} onClose={this.hideAddBox} little>
-          <AddBox currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} />
+          <AddNodeBox currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} />
         </CustomAnimation>
       </main>
     )};
