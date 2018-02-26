@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class TaskNode(node_factory('TaskEdge')):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     in_degree = models.IntegerField(editable=False, null=True)
     out_degree = models.IntegerField(editable=False, null=True)
@@ -24,7 +24,7 @@ class TaskNode(node_factory('TaskEdge')):
 
 
 class TaskEdge(edge_factory(TaskNode, concrete=False)):
-    name = models.CharField(max_length=32, blank=True, null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
     graph = models.ForeignKey('DiGraph', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
@@ -37,8 +37,9 @@ class TaskEdge(edge_factory(TaskNode, concrete=False)):
 
 
 class DiGraph(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Workflow graphs'

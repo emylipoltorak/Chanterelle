@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
 import DropdownMenu, { NestedDropdownMenu } from 'react-dd-menu';
 import auth from '../auth';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
+const csrfToken = Cookies.get('csrftoken');
 
 // small, reusable UI components.
 
@@ -61,7 +65,7 @@ class Navbar extends Component {
     this.handleWorkflowSelect = this.handleWorkflowSelect.bind(this);
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
-    this.addWorkFlow = this.addWorkFlow.bind(this);
+    this.deleteWorkflow = this.deleteWorkflow.bind(this);
   }
 
   toggle () {
@@ -73,11 +77,27 @@ class Navbar extends Component {
   }
 
   handleWorkflowSelect(e) {
-    this.props.changeWorkflow(e.target.id);
+    this.props.changeWorkflow(e.currentTarget.id);
+    console.log(e.currentTarget.id);
   }
 
-  addWorkFlow (e) {
-    
+  deleteWorkflow (e) {
+    e.preventDefault();
+    console.log(e.currentTarget.id);
+    console.log('delete button clicked');
+    axios({
+      method: 'POST',
+      url: '/api/delete-workflow',
+      data: {workflow: e.currentTarget.id},
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": 'Token ' + localStorage.token
+      }
+    }).then(result => {
+      this.props.loadUserWorkflows(false);
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
 render() {
@@ -101,11 +121,24 @@ render() {
           {
             this.props.workflows[0] ?
             <ul>
-              {this.props.workflows.map(workflow => {
-                return <li key={workflow.id}><button id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</button></li>
+              {/* <li><span onClick={this.handleWorkflowSelect}>{this.props.workflows[0]}</span></li> */}
+              <li>
+                <span id={this.props.workflows[0].id} onClick={this.handleWorkflowSelect}>{this.props.workflows[0].name}</span>
+                <div className='edit-delete'>
+                  <span id={this.props.workflows[0].id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
+                </div>
+              </li>
+              {this.props.workflows.slice(1).map(workflow => {
+                return <li key={workflow.id}>
+                    <span id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</span>
+                    <div className='edit-delete'>
+                      <span id={workflow.id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
+                      <span id={workflow.id} onClick={this.deleteWorkflow}><i className="fas fa-trash" /></span>
+                  </div>
+                </li>
               }
             )}
-            <li><button>+ New Workflow</button></li>
+            <li onClick={this.props.showAddModal}><button>+ New Workflow</button></li>
             </ul> : null
           }
         </NestedDropdownMenu>

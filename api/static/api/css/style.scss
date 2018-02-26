@@ -77,7 +77,31 @@ main {
   .dd-menu-items {
   }
   li {
+    span {
+      min-width: auto !important;
+      font-family: $main-font !important;
+      font-size: 20px !important;
+      color: $dark-color !important;
+    }
     color: $dark-color;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .edit-delete {
+      span {
+        @include animate-simple();
+        color: transparent !important;
+      }
+      margin-right: 10px !important;
+    }
+    li:hover {
+      .edit-delete {
+        span {
+          @include animate-simple();
+          color: $dark-color !important;
+        }
+      }
+    }
     a {
       font-family: $main-font !important;
       font-size: 20px !important;

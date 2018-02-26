@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CyContainer from '../components/cy_container';
-import AddNodeBox from '../components/add_box';
+import { AddNodeBox }from '../components/modals';
 import CustomAnimation from 'react-responsive-modal';
 
 export default class Graph extends Component {

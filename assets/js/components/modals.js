@@ -82,7 +82,7 @@ class AddWorkflowBox extends Component {
     e.preventDefault();
     axios({
       method: 'post',
-      url: '/add-workflow/',
+      url: '/api/add-workflow/',
       data:{name: this.state.name, description: this.state.description},
       headers: {
         "X-CSRFTOKEN": csrfToken,
@@ -92,6 +92,7 @@ class AddWorkflowBox extends Component {
       .then(response => {
         this.setState({ name: '', description: '' })
         this.props.loadUserWorkflows(false);
+        this.hideAddModal();
       }).catch(error => {
         console.log(error)
     })
@@ -113,6 +114,61 @@ class AddWorkflowBox extends Component {
       </form>
     )
   }
+};
+
+class EditWorkflowBox extends Component {
+  constructor (props) {
+    super (props);
+    this.state = { name: this.props.workflow.name, description: this.props.workflow.description || '' }
+
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleNameChange (e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleDescriptionChange (e) {
+    this.setState({description: e.target.value});
+  }
+
+  handleSubmit (e) {
+    e.preventDefault();
+    axios({
+      method: 'post',
+      url: '/api/edit-workflow/',
+      data:{name: this.state.name, description: this.state.description, workflow: this.props.workflow.id},
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": 'Token ' + localStorage.token
+      }
+    })
+      .then(response => {
+        this.props.loadUserWorkflows(false);
+        this.props.hideEditModal();
+      }).catch(error => {
+        console.log(error)
+    })
+  }
+
+  render () {
+    return (
+      <form className='addBox' onSubmit={this.handleSubmit}>
+        <h1>{`{Editing: ${this.props.workflow.name}}`}</h1>
+        <label id='name'>
+          New Name:
+          <input type='text' value={this.state.name} onChange={this.handleNameChange} />
+        </label>
+        <label>
+          New Description:
+          <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
+        </label>
+        <button type='submit' value='Submit'>Save</button>
+      </form>
+    )
+  }
 }
 
-export { AddNodeBox, AddWorkflowBox }
+export { AddNodeBox, AddWorkflowBox, EditWorkflowBox }

@@ -100,6 +100,31 @@ main {
 }
 .dd-menu li {
   color: #2C2029;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+.dd-menu li span {
+  min-width: auto !important;
+  font-family: "Nixie One", cursive !important;
+  font-size: 20px !important;
+  color: #2C2029 !important;
+}
+.dd-menu li .edit-delete {
+  margin-right: 10px !important;
+}
+.dd-menu li .edit-delete span {
+  -webkit-transition: color 300ms ease-in-out;
+  -moz-transition: color 300ms ease-in-out;
+  -o-transition: color 300ms ease-in-out;
+  transition: color 300ms ease-in-out;
+  color: transparent !important;
+}
+.dd-menu li li:hover .edit-delete span {
+  -webkit-transition: color 300ms ease-in-out;
+  -moz-transition: color 300ms ease-in-out;
+  -o-transition: color 300ms ease-in-out;
+  transition: color 300ms ease-in-out;
+  color: #2C2029 !important;
 }
 .dd-menu li a {
   font-family: "Nixie One", cursive !important;

@@ -29,4 +29,4 @@ class DiGraphSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DiGraph
-        fields = ('name', 'id', 'owner', 'nodes', 'edges')
+        fields = ('name', 'id', 'owner', 'description', 'nodes', 'edges')

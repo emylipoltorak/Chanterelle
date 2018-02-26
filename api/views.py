@@ -52,6 +52,16 @@ def add_node(request):
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+def edit_node(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        name = data['name']
+        description = data['description']
+        node = TaskNode.objects.get(pk=data['node'])
+        node.name = name
+        node.description = description
+        return JsonResponse({'message': 'success'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
 def delete_node(request):
     if request.method == 'POST':
@@ -84,6 +94,38 @@ def delete_edge(request):
         child = graph.nodes.all().get(pk=data['child'])
         graph.remove_edge(parent, child)
         graph.save()
+        return JsonResponse({'message': 'deleted'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def add_workflow(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        user = request.user
+        name = data['name']
+        description = data['description']
+        new_graph = DiGraph(name=name, description=description, owner = user)
+        new_graph.save()
+        return JsonResponse({'message':'success'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def edit_workflow(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        user = request.user
+        name = data['name']
+        description = data['description']
+        graph = DiGraph.objects.get(pk=data['workflow'])
+        graph.name=name
+        graph.description=description
+        graph.save()
+        return JsonResponse({'message':'success'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def delete_workflow(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        workflow = DiGraph.objects.get(pk=data['workflow'])
+        workflow.delete()
         return JsonResponse({'message': 'deleted'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
