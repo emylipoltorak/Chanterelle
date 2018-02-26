@@ -109,9 +109,6 @@ main {
   font-size: 20px !important;
   color: #2C2029 !important;
 }
-.dd-menu li .edit-delete {
-  margin-right: 10px !important;
-}
 .dd-menu li .edit-delete span {
   -webkit-transition: color 300ms ease-in-out;
   -moz-transition: color 300ms ease-in-out;
