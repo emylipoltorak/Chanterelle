@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Header, Footer, Navbar, AuthButtons } from './components/ui';
 import NavbarTest from './components/NavBar-Test';
 import { Main } from './main';
+import { AddWorkflowBox } from './components/add_box';
 import axios from 'axios';
 import auth from './auth';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import CustomAnimation from 'react-responsive-modal';
 
 // Set up cookies and auth token for the entire application.
 // TODO: pass these values down as props to all children that use them. State?
@@ -23,6 +25,8 @@ export default class App extends Component {
     this.updateUsername = this.updateUsername.bind(this);
     this.loadUserWorkflows = this.loadUserWorkflows.bind(this);
     this.changeWorkflow = this.changeWorkflow.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.showModal = this.showModal.bind(this);
   }
 
   componentWillMount() {
@@ -99,14 +103,27 @@ export default class App extends Component {
     this.setState({workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: ''});
   }
 
+  showModal () {
+    this.setState({ open: true })
+  }
+
+  hideModal () {
+    this.setState({ open: false })
+  }
+
+
   render () {
+    const { open } = this.state;
     return (
       <div className='app'>
         <Header currentWorkflow={this.state.currentWorkflow} />
         <AuthButtons isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} loadUserWorkflows={this.loadUserWorkflows}  />
-        {this.state.isLoggedIn ? <Navbar workflows={this.state.workflows} currentWorkflow={this.state.currentWorkflow} changeWorkflow={this.changeWorkflow} isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} /> : null }
+        {this.state.isLoggedIn ? <Navbar workflows={this.state.workflows} currentWorkflow={this.state.currentWorkflow} changeWorkflow={this.changeWorkflow} isLoggedIn={this.state.isLoggedIn} username={this.state.username} updateUsername={this.updateUsername} showModal={this.showModal} /> : null }
         {(this.state.currentWorkflow.nodes || !this.state.isLoggedIn) ? <Main currentWorkflow={this.state.currentWorkflow} loadUserWorkflows={this.loadUserWorkflows} isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} />: <main className='loading'>...</main>}
         <Footer />
+        <CustomAnimation open={open} onClose={this.hideModal} little>
+          <AddWorkflowBox loadUserWorkflows={this.state.loadUserWorkflows} username={this.state.username} />
+        </CustomAnimation>
       </div>
       )
   }
