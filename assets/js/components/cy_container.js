@@ -26,7 +26,7 @@ const cyConfig = {
         'color': '#2C2029',
         'text-valign':'center',
         'text-halign': 'center',
-        'font-size': '15',
+        'font-size': '25px',
         'font-family': 'Nixie One, cursive',
         'shape': 'roundrectangle',
         'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
