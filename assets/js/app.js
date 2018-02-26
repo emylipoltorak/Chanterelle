@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Footer, Navbar, AuthButtons } from './components/ui';
+import NavbarTest from './components/NavBar-Test';
 import { Main } from './main';
 import axios from 'axios';
 import auth from './auth';
@@ -17,7 +18,7 @@ export default class App extends Component {
   constructor (props) {
     //set up default props and state, and bind all class methods to be passed down.
     super(props);
-    this.state = {workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: ''};
+    this.state = {workflows: {}, currentWorkflow: {}, isLoggedIn: false, username: '', open:false};
     this.checkLogIn = this.checkLogIn.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
     this.loadUserWorkflows = this.loadUserWorkflows.bind(this);

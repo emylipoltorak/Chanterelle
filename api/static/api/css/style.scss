@@ -6,7 +6,6 @@
 @import url('https://fonts.googleapis.com/css?family=Shrikhand');
 @import "animated/animated";
 
-@include animation(slide-in-down);
 @include animation(fade-in);
 @include animation(fade-out);
 
@@ -72,32 +71,24 @@ main {
   font-size: 50px;
 }
 
-nav {
-  margin-left: 15px;
+.dd-menu {
   grid-area: nav;
-  text-align: center;
-  ul {
-    opacity: 0;
-    @include animate(fade-out, 800ms);
+  background: transparent;
+  .dd-menu-items {
   }
-  li button {
-    margin: 5px;
-    border: 1px solid $dark-color;
-    background: transparent;
+  li {
     color: $dark-color;
-    height: auto;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 30px;
-    font-family: $main-font;
+    a {
+      font-family: $main-font !important;
+      font-size: 20px !important;
+      color: $dark-color !important;
+    }
+    button, a {
+      font-family: $main-font !important;
+      font-size: 20px !important;
+      color: $dark-color !important;
+    }
   }
-}
-
-nav:hover ul{
-  @include animate(fade-in, 800ms);
-  opacity: 100%;
 }
 
 .fa-code-branch {

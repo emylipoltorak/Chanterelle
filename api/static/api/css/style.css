@@ -4,30 +4,6 @@
 @import url("https://fonts.googleapis.com/css?family=Gravitas+One");
 @import url("https://fonts.googleapis.com/css?family=Trochut");
 @import url("https://fonts.googleapis.com/css?family=Shrikhand");
-@-webkit-keyframes slideInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(-2000px);
-    transform: translateY(-2000px);
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-@keyframes slideInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(-2000px);
-    -ms-transform: translateY(-2000px);
-    transform: translateY(-2000px);
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
 @-webkit-keyframes fadeIn {
   0% {
     opacity: 0;
@@ -118,54 +94,22 @@ main {
   font-size: 50px;
 }
 
-nav {
-  margin-left: 15px;
+.dd-menu {
   grid-area: nav;
-  text-align: center;
-}
-nav ul {
-  opacity: 0;
-  -webkit-animation-duration: 800ms;
-  -moz-animation-duration: 800ms;
-  -o-animation-duration: 800ms;
-  animation-duration: 800ms;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-name: fadeOut;
-  -moz-animation-name: fadeOut;
-  -o-animation-name: fadeOut;
-  animation-name: fadeOut;
-}
-nav li button {
-  margin: 5px;
-  border: 1px solid #2C2029;
   background: transparent;
-  color: #2C2029;
-  height: auto;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 30px;
-  font-family: "Nixie One", cursive;
 }
-
-nav:hover ul {
-  -webkit-animation-duration: 800ms;
-  -moz-animation-duration: 800ms;
-  -o-animation-duration: 800ms;
-  animation-duration: 800ms;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-name: fadeIn;
-  -moz-animation-name: fadeIn;
-  -o-animation-name: fadeIn;
-  animation-name: fadeIn;
-  opacity: 100%;
+.dd-menu li {
+  color: #2C2029;
+}
+.dd-menu li a {
+  font-family: "Nixie One", cursive !important;
+  font-size: 20px !important;
+  color: #2C2029 !important;
+}
+.dd-menu li button, .dd-menu li a {
+  font-family: "Nixie One", cursive !important;
+  font-size: 20px !important;
+  color: #2C2029 !important;
 }
 
 .fa-code-branch {

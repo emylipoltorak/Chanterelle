@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
+import DropdownMenu, { NestedDropdownMenu } from 'react-dd-menu';
 import auth from '../auth';
 
 // small, reusable UI components.
@@ -53,38 +54,66 @@ const AuthButtons = (props) => {
 }
 
 class Navbar extends Component {
+  constructor (props) {
+    super (props);
+    this.state = { isMenuOpen: false };
 
-  constructor(props) {
-    super(props);
     this.handleWorkflowSelect = this.handleWorkflowSelect.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.close = this.close.bind(this);
+    this.addWorkFlow = this.addWorkFlow.bind(this);
+  }
+
+  toggle () {
+    this.setState({ isMenuOpen: !this.state.isMenuOpen });
+  }
+
+  close () {
+    this.setState({ isMenuOpen:false });
   }
 
   handleWorkflowSelect(e) {
     this.props.changeWorkflow(e.target.id);
   }
 
-  render() {
+  addWorkFlow (e) {
+    
+  }
+
+render() {
+  const menuOptions = {
+    isOpen: this.state.isMenuOpen,
+    close: this.close,
+    toggle: <span onClick={this.toggle}><i className="fas fa-code-branch fa-rotate-180"></i></span>,
+    align: 'left',
+    size: 'sm',
+  };
+
+  const nestedProps = {
+    toggle: <button id='workflows'>Workflows</button>,
+    animate: true,
+    nested: 'reverse',
+  }
+
     return (
-      <nav>
-        <i className="fas fa-code-branch fa-rotate-180"></i>
-        <ul>
-          <li>
-            <button id='workflows'>Workflows</button>
-            {
-              this.props.workflows[0] ?
-              <ul>
-                {this.props.workflows.map(workflow => {
-                  return <li key={workflow.id}><button id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</button></li>
-                }
-              )}
-              </ul> : null
-            }
-          </li>
-          <li><Link to='/'><button>Next</button></Link></li>
-          <li><Link to='/graph'><button>Graph</button></Link></li>
-        </ul>
-      </nav>
-    )
+      <DropdownMenu {...menuOptions}>
+        <NestedDropdownMenu {...nestedProps}>
+          {
+            this.props.workflows[0] ?
+            <ul>
+              {this.props.workflows.map(workflow => {
+                return <li key={workflow.id}><button id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</button></li>
+              }
+            )}
+            <li><button>+ New Workflow</button></li>
+            </ul> : null
+          }
+        </NestedDropdownMenu>
+        <li role='separator' className='separator' />
+        <li><Link to='/'>Next</Link></li>
+        <li><Link to='/graph'>Graph</Link></li>
+      </DropdownMenu>
+    );
   }
 };
 
