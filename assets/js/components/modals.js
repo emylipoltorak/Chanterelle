@@ -145,9 +145,10 @@ class AddWorkflowBox extends Component {
       }
     })
       .then(response => {
+        console.log(response);
         this.setState({ name: '', description: '' })
         this.props.loadUserWorkflows(false);
-        this.hideAddModal();
+        this.props.hideAddModal();
       }).catch(error => {
         console.log(error)
     })

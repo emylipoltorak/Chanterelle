@@ -153,7 +153,9 @@ export default class App extends Component {
         {(this.state.currentWorkflow.nodes || !this.state.isLoggedIn) ? <Main currentWorkflow={this.state.currentWorkflow} loadUserWorkflows={this.loadUserWorkflows} isLoggedIn={this.state.isLoggedIn} checkLogIn={this.checkLogIn} username={this.state.username} updateUsername={this.updateUsername} />: <main className='loading'>...</main>}
         <Footer />
         <CustomAnimation open={this.state.addOpen} onClose={this.hideAddModal} loadUserWorkflows={this.loadUserWorkflows} little>
-          <AddWorkflowBox loadUserWorkflows={this.loadUserWorkflows} hideAddModal={this.hideAddModal} />
+          <AddWorkflowBox
+            loadUserWorkflows={this.loadUserWorkflows}
+            hideAddModal={this.hideAddModal} />
         </CustomAnimation>
         <CustomAnimation open={this.state.editOpen} onClose={this.hideEditModal} loadUserWorkflows={this.loadUserWorkflows} little>
           <EditWorkflowBox
