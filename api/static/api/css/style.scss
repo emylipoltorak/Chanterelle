@@ -88,9 +88,11 @@ main {
     justify-content: space-between !important;
 
     .edit-delete {
-      width: 10px !important;
+      min-width: auto !important;
       margin-right: 0 !important;
+      display: flex !important;
       span {
+        margin: 3px !important;
         @include animate-simple();
         color: transparent !important;
       }
@@ -100,6 +102,10 @@ main {
         span {
           @include animate-simple();
           color: $dark-color !important;
+        }
+        span:hover {
+          @include animate-simple();
+          color: rgba($dark-color, 0.7);
         }
       }
     }

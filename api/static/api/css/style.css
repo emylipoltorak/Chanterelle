@@ -110,10 +110,12 @@ main {
   color: #2C2029 !important;
 }
 .dd-menu li .edit-delete {
-  width: 10px !important;
+  min-width: auto !important;
   margin-right: 0 !important;
+  display: flex !important;
 }
 .dd-menu li .edit-delete span {
+  margin: 3px !important;
   -webkit-transition: color 300ms ease-in-out;
   -moz-transition: color 300ms ease-in-out;
   -o-transition: color 300ms ease-in-out;
@@ -126,6 +128,13 @@ main {
   -o-transition: color 300ms ease-in-out;
   transition: color 300ms ease-in-out;
   color: #2C2029 !important;
+}
+.dd-menu li li:hover .edit-delete span:hover {
+  -webkit-transition: color 300ms ease-in-out;
+  -moz-transition: color 300ms ease-in-out;
+  -o-transition: color 300ms ease-in-out;
+  transition: color 300ms ease-in-out;
+  color: rgba(44, 32, 41, 0.7);
 }
 .dd-menu li a {
   font-family: "Nixie One", cursive !important;

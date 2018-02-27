@@ -7,6 +7,7 @@ from rest_framework import viewsets, permissions, status, generics
 from django.http import JsonResponse
 import json
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
 
 
 def home(request):
@@ -41,6 +42,7 @@ class DiGraphByID(APIView):
         serializer = DiGraphSerializer(graphs, many=False)
         return Response(serializer.data)
 
+@api_view(["POST"])
 def add_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -52,6 +54,7 @@ def add_node(request):
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def edit_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -64,6 +67,7 @@ def edit_node(request):
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def delete_node(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -75,6 +79,7 @@ def delete_node(request):
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
 
+@api_view(["POST"])
 def add_edge(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -86,7 +91,7 @@ def add_edge(request):
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
-
+@api_view(["POST"])
 def delete_edge(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -98,6 +103,7 @@ def delete_edge(request):
         return JsonResponse({'message': 'deleted'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def add_workflow(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -109,6 +115,7 @@ def add_workflow(request):
         return JsonResponse({'message':'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def edit_workflow(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -122,6 +129,7 @@ def edit_workflow(request):
         return JsonResponse({'message':'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def delete_workflow(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -130,6 +138,7 @@ def delete_workflow(request):
         return JsonResponse({'message': 'deleted'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def register_user(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -142,6 +151,7 @@ def register_user(request):
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
+@api_view(["POST"])
 def logout_user(request):
     logout(request.user)
     return JsonResponse({'message': 'user was logged out'})
