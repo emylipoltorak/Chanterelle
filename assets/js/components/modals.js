@@ -44,7 +44,7 @@ class AddNodeBox extends Component {
 
   render () {
     return (
-      <form className='addBox' onSubmit={this.handleSubmit}>
+      <form className='modal' onSubmit={this.handleSubmit}>
         <h1>{`{New Task}`}</h1>
         <label id='name'>
           Name:
@@ -55,6 +55,61 @@ class AddNodeBox extends Component {
           <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
         </label>
         <button type='submit' value='Submit'>Add</button>
+      </form>
+    )
+  }
+}
+
+class EditWorkflowBox extends Component {
+  constructor (props) {
+    super (props);
+    this.state = { name: this.props.workflow.name, description: this.props.workflow.description || '' }
+
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleNameChange (e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleDescriptionChange (e) {
+    this.setState({description: e.target.value});
+  }
+
+  handleSubmit (e) {
+    e.preventDefault();
+    axios({
+      method: 'post',
+      url: '/api/edit-workflow/',
+      data:{name: this.state.name, description: this.state.description, workflow: this.props.workflow.id},
+      headers: {
+        "X-CSRFTOKEN": csrfToken,
+        "Authorization": 'Token ' + localStorage.token
+      }
+    })
+      .then(response => {
+        this.props.loadUserWorkflows(false);
+        this.props.hideEditModal();
+      }).catch(error => {
+        console.log(error)
+    })
+  }
+
+  render () {
+    return (
+      <form className='modal' onSubmit={this.handleSubmit}>
+        <h1>{`{Editing: ${this.props.workflow.name}}`}</h1>
+        <label id='name'>
+          New Name:
+          <input type='text' value={this.state.name} onChange={this.handleNameChange} />
+        </label>
+        <label>
+          New Description:
+          <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
+        </label>
+        <button type='submit' value='Submit'>Save</button>
       </form>
     )
   }
@@ -100,7 +155,7 @@ class AddWorkflowBox extends Component {
 
   render () {
     return (
-      <form className='addBox' onSubmit={this.handleSubmit}>
+      <form className='modal' onSubmit={this.handleSubmit}>
         <h1>{`{New Workflow}`}</h1>
         <label id='name'>
           Name:
@@ -116,10 +171,10 @@ class AddWorkflowBox extends Component {
   }
 };
 
-class EditWorkflowBox extends Component {
+class EditNodeBox extends Component {
   constructor (props) {
     super (props);
-    this.state = { name: this.props.workflow.name, description: this.props.workflow.description || '' }
+    this.state = { name: '', description: '' }
 
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -138,8 +193,8 @@ class EditWorkflowBox extends Component {
     e.preventDefault();
     axios({
       method: 'post',
-      url: '/api/edit-workflow/',
-      data:{name: this.state.name, description: this.state.description, workflow: this.props.workflow.id},
+      url: '/api/edit-node/',
+      data:{name: this.state.name, description: this.state.description, node: this.props.node.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,
         "Authorization": 'Token ' + localStorage.token
@@ -147,16 +202,17 @@ class EditWorkflowBox extends Component {
     })
       .then(response => {
         this.props.loadUserWorkflows(false);
-        this.props.hideEditModal();
+        this.props.hideEditNodeBox();
       }).catch(error => {
         console.log(error)
     })
   }
 
   render () {
+    console.log(this.props.node);
     return (
-      <form className='addBox' onSubmit={this.handleSubmit}>
-        <h1>{`{Editing: ${this.props.workflow.name}}`}</h1>
+      <form className='modal' onSubmit={this.handleSubmit}>
+        <h1>{`{Editing: ${this.props.node.name}}`}</h1>
         <label id='name'>
           New Name:
           <input type='text' value={this.state.name} onChange={this.handleNameChange} />
@@ -171,4 +227,4 @@ class EditWorkflowBox extends Component {
   }
 }
 
-export { AddNodeBox, AddWorkflowBox, EditWorkflowBox }
+export { AddNodeBox, AddWorkflowBox, EditWorkflowBox, EditNodeBox }

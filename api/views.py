@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from api.models import DiGraph
+from api.models import DiGraph, TaskNode
 from api.serializers import DiGraphSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -60,6 +60,7 @@ def edit_node(request):
         node = TaskNode.objects.get(pk=data['node'])
         node.name = name
         node.description = description
+        node.save()
         return JsonResponse({'message': 'success'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 

@@ -88,6 +88,8 @@ main {
     justify-content: space-between !important;
 
     .edit-delete {
+      width: 10px !important;
+      margin-right: 0 !important;
       span {
         @include animate-simple();
         color: transparent !important;
@@ -244,7 +246,7 @@ header h2 {
   background-color: $lightest;
 }
 
-.addBox {
+.modal {
   font-family: $main-font;
   color: $dark-color;
   display: flex;

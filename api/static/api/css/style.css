@@ -109,6 +109,10 @@ main {
   font-size: 20px !important;
   color: #2C2029 !important;
 }
+.dd-menu li .edit-delete {
+  width: 10px !important;
+  margin-right: 0 !important;
+}
 .dd-menu li .edit-delete span {
   -webkit-transition: color 300ms ease-in-out;
   -moz-transition: color 300ms ease-in-out;
@@ -288,7 +292,7 @@ header h2 {
   background-color: #F4F8F6;
 }
 
-.addBox {
+.modal {
   font-family: "Nixie One", cursive;
   color: #2C2029;
   display: flex;
@@ -296,42 +300,42 @@ header h2 {
   align-items: center;
   justify-content: space-between;
 }
-.addBox textarea {
+.modal textarea {
   width: 100%;
   height: 250px;
 }
-.addBox h1 {
+.modal h1 {
   align-self: center;
   font-size: 30px;
   margin-bottom: 15px;
   color: #E04627;
 }
-.addBox label {
+.modal label {
   width: 100%;
   margin-bottom: 10px;
   margin-left: 45px;
   margin-right: 45px;
 }
-.addBox textarea {
+.modal textarea {
   margin-top: 10px;
 }
-.addBox input, .addBox textarea {
+.modal input, .modal textarea {
   font-family: "Nixie One", cursive;
   font-size: 20px;
   background-color: white;
 }
-.addBox label, .addBox input {
+.modal label, .modal input {
   font-size: 25px;
 }
-.addBox #name {
+.modal #name {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.addBox #name input {
+.modal #name input {
   width: 60%;
 }
-.addBox button[type='submit'] {
+.modal button[type='submit'] {
   -webkit-transition: background-color 200ms ease-in-out;
   -moz-transition: background-color 200ms ease-in-out;
   -o-transition: background-color 200ms ease-in-out;
@@ -349,7 +353,7 @@ header h2 {
   font-size: 30px;
   font-family: "Nixie One", cursive;
 }
-.addBox button[type='submit']:hover {
+.modal button[type='submit']:hover {
   -webkit-transition: background-color 200ms ease-in-out;
   -moz-transition: background-color 200ms ease-in-out;
   -o-transition: background-color 200ms ease-in-out;

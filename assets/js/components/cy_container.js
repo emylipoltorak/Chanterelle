@@ -63,8 +63,6 @@ export default class CyContainer extends Component {
   };
 
   componentWillReceiveProps (nextProps) {
-    console.log('componentWillReceiveProps ran in cyContainer');
-    console.log(nextProps.currentWorkflow);
     this.renderGraph(nextProps.currentWorkflow);
   };
 
@@ -73,7 +71,6 @@ export default class CyContainer extends Component {
   }
 
   renderGraph(graph) {
-    console.log('renderGraph ran');
     cy.destroy();
     cy = cytoscape(cyConfig);
     graph.nodes.forEach(node => {
@@ -81,6 +78,7 @@ export default class CyContainer extends Component {
         data: {
           id: node.id,
           name: node.name,
+          description: node.description,
           inDegree: node.in_degree,
           outDegree: node.out_degree,
           deepest: graph.nodes.length,
@@ -116,10 +114,16 @@ export default class CyContainer extends Component {
 
     cy.nodes().forEach(ele => {
         ele.qtip({
+          hide: {
+            event: 'click unfocus'
+          },
           content: () => {
             const delBtn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             const editBtn = $('<button class="edit-button"><i class="far fa-edit"></i></button>');
+            editBtn.attr('id', ele.data('id'));
             delBtn.click(() => {
+              // ele.qtip('hide');
+              console.log(ele.qtip('hide'));
               axios({
                 method: 'post',
                 url: '/delete-node/',
@@ -130,17 +134,19 @@ export default class CyContainer extends Component {
                 }
               })
                 .then(response => {
-                  this.props.loadUserWorkflows(false)
+                  this.props.loadUserWorkflows(false);
                 }).catch(error => {
                   console.log(error)
               })
             });
-            editBtn.click(() => {
-              console.log('not implemented yet.')
+            editBtn.click((e) => {
+              this.props.showEditNodeBox(e);
             });
             return [delBtn, editBtn];
+            console.log(delBtn);
           },
           title: ele.name,
+          text: ele.description,
           style: {
             classes: 'qtip-tipsy'
           },
@@ -154,6 +160,9 @@ export default class CyContainer extends Component {
 
       cy.edges().forEach(ele => {
         ele.qtip({
+          hide: {
+            event: 'click unfocus'
+          },
           content: () => {
             const btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             btn.click(() => {
@@ -181,6 +190,9 @@ export default class CyContainer extends Component {
             my: 'bottom center',
             at: 'right center',
             target: ele
+          },
+          hide: {
+            event: 'click unfocus'
           }
         });
       });
@@ -199,7 +211,6 @@ export default class CyContainer extends Component {
           }
         })
           .then(response => {
-            console.log('Edge should be created now. Calling loadUserWorkflows.')
             this.props.loadUserWorkflows(false);
           }).catch(error => {
             console.log(error)

@@ -20,7 +20,14 @@ export default class App extends Component {
   constructor (props) {
     //set up default props and state, and bind all class methods to be passed down.
     super(props);
-    this.state = {workflows: {}, currentWorkflow: {}, workflowToEdit: {}, isLoggedIn: false, username: '', addOpen:false, editOpen: false};
+    this.state = {
+      workflows: {},
+      currentWorkflow: {},
+      workflowToEdit: {},
+      isLoggedIn: false,
+      username: '',
+      addOpen:false,
+      editOpen: false};
     this.checkLogIn = this.checkLogIn.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
     this.loadUserWorkflows = this.loadUserWorkflows.bind(this);

@@ -15789,7 +15789,7 @@ function shiftRanks(t, g, delta) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.EditWorkflowBox = exports.AddWorkflowBox = exports.AddNodeBox = undefined;
+exports.EditNodeBox = exports.EditWorkflowBox = exports.AddWorkflowBox = exports.AddNodeBox = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -15867,7 +15867,7 @@ var AddNodeBox = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'form',
-        { className: 'addBox', onSubmit: this.handleSubmit },
+        { className: 'modal', onSubmit: this.handleSubmit },
         _react2.default.createElement(
           'h1',
           null,
@@ -15897,15 +15897,15 @@ var AddNodeBox = function (_Component) {
   return AddNodeBox;
 }(_react.Component);
 
-var AddWorkflowBox = function (_Component2) {
-  _inherits(AddWorkflowBox, _Component2);
+var EditWorkflowBox = function (_Component2) {
+  _inherits(EditWorkflowBox, _Component2);
 
-  function AddWorkflowBox(props) {
-    _classCallCheck(this, AddWorkflowBox);
+  function EditWorkflowBox(props) {
+    _classCallCheck(this, EditWorkflowBox);
 
-    var _this3 = _possibleConstructorReturn(this, (AddWorkflowBox.__proto__ || Object.getPrototypeOf(AddWorkflowBox)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (EditWorkflowBox.__proto__ || Object.getPrototypeOf(EditWorkflowBox)).call(this, props));
 
-    _this3.state = { name: '', description: '' };
+    _this3.state = { name: _this3.props.workflow.name, description: _this3.props.workflow.description || '' };
 
     _this3.handleDescriptionChange = _this3.handleDescriptionChange.bind(_this3);
     _this3.handleNameChange = _this3.handleNameChange.bind(_this3);
@@ -15913,7 +15913,7 @@ var AddWorkflowBox = function (_Component2) {
     return _this3;
   }
 
-  _createClass(AddWorkflowBox, [{
+  _createClass(EditWorkflowBox, [{
     key: 'handleNameChange',
     value: function handleNameChange(e) {
       this.setState({ name: e.target.value });
@@ -15931,16 +15931,15 @@ var AddWorkflowBox = function (_Component2) {
       e.preventDefault();
       (0, _axios2.default)({
         method: 'post',
-        url: '/api/add-workflow/',
-        data: { name: this.state.name, description: this.state.description },
+        url: '/api/edit-workflow/',
+        data: { name: this.state.name, description: this.state.description, workflow: this.props.workflow.id },
         headers: {
           "X-CSRFTOKEN": csrfToken,
           "Authorization": 'Token ' + localStorage.token
         }
       }).then(function (response) {
-        _this4.setState({ name: '', description: '' });
         _this4.props.loadUserWorkflows(false);
-        _this4.hideAddModal();
+        _this4.props.hideEditModal();
       }).catch(function (error) {
         console.log(error);
       });
@@ -15950,7 +15949,90 @@ var AddWorkflowBox = function (_Component2) {
     value: function render() {
       return _react2.default.createElement(
         'form',
-        { className: 'addBox', onSubmit: this.handleSubmit },
+        { className: 'modal', onSubmit: this.handleSubmit },
+        _react2.default.createElement(
+          'h1',
+          null,
+          '{Editing: ' + this.props.workflow.name + '}'
+        ),
+        _react2.default.createElement(
+          'label',
+          { id: 'name' },
+          'New Name:',
+          _react2.default.createElement('input', { type: 'text', value: this.state.name, onChange: this.handleNameChange })
+        ),
+        _react2.default.createElement(
+          'label',
+          null,
+          'New Description:',
+          _react2.default.createElement('textarea', { value: this.state.description, onChange: this.handleDescriptionChange })
+        ),
+        _react2.default.createElement(
+          'button',
+          { type: 'submit', value: 'Submit' },
+          'Save'
+        )
+      );
+    }
+  }]);
+
+  return EditWorkflowBox;
+}(_react.Component);
+
+var AddWorkflowBox = function (_Component3) {
+  _inherits(AddWorkflowBox, _Component3);
+
+  function AddWorkflowBox(props) {
+    _classCallCheck(this, AddWorkflowBox);
+
+    var _this5 = _possibleConstructorReturn(this, (AddWorkflowBox.__proto__ || Object.getPrototypeOf(AddWorkflowBox)).call(this, props));
+
+    _this5.state = { name: '', description: '' };
+
+    _this5.handleDescriptionChange = _this5.handleDescriptionChange.bind(_this5);
+    _this5.handleNameChange = _this5.handleNameChange.bind(_this5);
+    _this5.handleSubmit = _this5.handleSubmit.bind(_this5);
+    return _this5;
+  }
+
+  _createClass(AddWorkflowBox, [{
+    key: 'handleNameChange',
+    value: function handleNameChange(e) {
+      this.setState({ name: e.target.value });
+    }
+  }, {
+    key: 'handleDescriptionChange',
+    value: function handleDescriptionChange(e) {
+      this.setState({ description: e.target.value });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      var _this6 = this;
+
+      e.preventDefault();
+      (0, _axios2.default)({
+        method: 'post',
+        url: '/api/add-workflow/',
+        data: { name: this.state.name, description: this.state.description },
+        headers: {
+          "X-CSRFTOKEN": csrfToken,
+          "Authorization": 'Token ' + localStorage.token
+        }
+      }).then(function (response) {
+        _this6.setState({ name: '', description: '' });
+        _this6.props.loadUserWorkflows(false);
+        _this6.hideAddModal();
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'form',
+        { className: 'modal', onSubmit: this.handleSubmit },
         _react2.default.createElement(
           'h1',
           null,
@@ -15982,23 +16064,23 @@ var AddWorkflowBox = function (_Component2) {
 
 ;
 
-var EditWorkflowBox = function (_Component3) {
-  _inherits(EditWorkflowBox, _Component3);
+var EditNodeBox = function (_Component4) {
+  _inherits(EditNodeBox, _Component4);
 
-  function EditWorkflowBox(props) {
-    _classCallCheck(this, EditWorkflowBox);
+  function EditNodeBox(props) {
+    _classCallCheck(this, EditNodeBox);
 
-    var _this5 = _possibleConstructorReturn(this, (EditWorkflowBox.__proto__ || Object.getPrototypeOf(EditWorkflowBox)).call(this, props));
+    var _this7 = _possibleConstructorReturn(this, (EditNodeBox.__proto__ || Object.getPrototypeOf(EditNodeBox)).call(this, props));
 
-    _this5.state = { name: _this5.props.workflow.name, description: _this5.props.workflow.description || '' };
+    _this7.state = { name: '', description: '' };
 
-    _this5.handleDescriptionChange = _this5.handleDescriptionChange.bind(_this5);
-    _this5.handleNameChange = _this5.handleNameChange.bind(_this5);
-    _this5.handleSubmit = _this5.handleSubmit.bind(_this5);
-    return _this5;
+    _this7.handleDescriptionChange = _this7.handleDescriptionChange.bind(_this7);
+    _this7.handleNameChange = _this7.handleNameChange.bind(_this7);
+    _this7.handleSubmit = _this7.handleSubmit.bind(_this7);
+    return _this7;
   }
 
-  _createClass(EditWorkflowBox, [{
+  _createClass(EditNodeBox, [{
     key: 'handleNameChange',
     value: function handleNameChange(e) {
       this.setState({ name: e.target.value });
@@ -16011,20 +16093,20 @@ var EditWorkflowBox = function (_Component3) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(e) {
-      var _this6 = this;
+      var _this8 = this;
 
       e.preventDefault();
       (0, _axios2.default)({
         method: 'post',
-        url: '/api/edit-workflow/',
-        data: { name: this.state.name, description: this.state.description, workflow: this.props.workflow.id },
+        url: '/api/edit-node/',
+        data: { name: this.state.name, description: this.state.description, node: this.props.node.id },
         headers: {
           "X-CSRFTOKEN": csrfToken,
           "Authorization": 'Token ' + localStorage.token
         }
       }).then(function (response) {
-        _this6.props.loadUserWorkflows(false);
-        _this6.props.hideEditModal();
+        _this8.props.loadUserWorkflows(false);
+        _this8.props.hideEditNodeBox();
       }).catch(function (error) {
         console.log(error);
       });
@@ -16032,13 +16114,14 @@ var EditWorkflowBox = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
+      console.log(this.props.node);
       return _react2.default.createElement(
         'form',
-        { className: 'addBox', onSubmit: this.handleSubmit },
+        { className: 'modal', onSubmit: this.handleSubmit },
         _react2.default.createElement(
           'h1',
           null,
-          '{Editing: ' + this.props.workflow.name + '}'
+          '{Editing: ' + this.props.node.name + '}'
         ),
         _react2.default.createElement(
           'label',
@@ -16061,12 +16144,13 @@ var EditWorkflowBox = function (_Component3) {
     }
   }]);
 
-  return EditWorkflowBox;
+  return EditNodeBox;
 }(_react.Component);
 
 exports.AddNodeBox = AddNodeBox;
 exports.AddWorkflowBox = AddWorkflowBox;
 exports.EditWorkflowBox = EditWorkflowBox;
+exports.EditNodeBox = EditNodeBox;
 
 /***/ }),
 /* 82 */
@@ -37751,7 +37835,14 @@ var App = function (_Component) {
     //set up default props and state, and bind all class methods to be passed down.
 
 
-    _this.state = { workflows: {}, currentWorkflow: {}, workflowToEdit: {}, isLoggedIn: false, username: '', addOpen: false, editOpen: false };
+    _this.state = {
+      workflows: {},
+      currentWorkflow: {},
+      workflowToEdit: {},
+      isLoggedIn: false,
+      username: '',
+      addOpen: false,
+      editOpen: false };
     _this.checkLogIn = _this.checkLogIn.bind(_this);
     _this.updateUsername = _this.updateUsername.bind(_this);
     _this.loadUserWorkflows = _this.loadUserWorkflows.bind(_this);
@@ -41106,40 +41197,58 @@ var Graph = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Graph.__proto__ || Object.getPrototypeOf(Graph)).call(this, props));
 
-    _this.state = { open: false };
-    _this.showAddBox = _this.showAddBox.bind(_this);
-    _this.hideAddBox = _this.hideAddBox.bind(_this);
+    _this.state = { addNodeOpen: false, editNodeOpen: false, nodeToEdit: {} };
+    _this.showAddNodeBox = _this.showAddNodeBox.bind(_this);
+    _this.hideAddNodeBox = _this.hideAddNodeBox.bind(_this);
+    _this.showEditNodeBox = _this.showEditNodeBox.bind(_this);
+    _this.hideEditNodeBox = _this.hideEditNodeBox.bind(_this);
     return _this;
   }
 
   _createClass(Graph, [{
-    key: 'showAddBox',
-    value: function showAddBox() {
-      this.setState({ open: true });
+    key: 'showAddNodeBox',
+    value: function showAddNodeBox() {
+      this.setState({ addNodeOpen: true });
     }
   }, {
-    key: 'hideAddBox',
-    value: function hideAddBox() {
-      this.setState({ open: false });
+    key: 'hideAddNodeBox',
+    value: function hideAddNodeBox() {
+      this.setState({ addNodeOpen: false });
+    }
+  }, {
+    key: 'showEditNodeBox',
+    value: function showEditNodeBox(e) {
+      this.setState({ editNodeOpen: true });
+      this.setState({ nodeToEdit: this.props.currentWorkflow.nodes.find(function (obj) {
+          return obj.id == e.currentTarget.id;
+        }) });
+    }
+  }, {
+    key: 'hideEditNodeBox',
+    value: function hideEditNodeBox() {
+      this.setState({ editNodeOpen: false });
     }
   }, {
     key: 'render',
     value: function render() {
-      var open = this.state.open;
-
       return _react2.default.createElement(
         'main',
         { className: 'graph' },
-        _react2.default.createElement(_cy_container2.default, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows }),
+        _react2.default.createElement(_cy_container2.default, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows, showEditNodeBox: this.showEditNodeBox }),
         _react2.default.createElement(
           'button',
-          { className: 'add', onClick: this.showAddBox },
+          { className: 'add', onClick: this.showAddNodeBox },
           'Add a Task'
         ),
         _react2.default.createElement(
           _reactResponsiveModal2.default,
-          { open: open, onClose: this.hideAddBox, little: true },
+          { open: this.state.addNodeOpen, onClose: this.hideAddNodeBox, little: true },
           _react2.default.createElement(_modals.AddNodeBox, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows })
+        ),
+        _react2.default.createElement(
+          _reactResponsiveModal2.default,
+          { open: this.state.editNodeOpen, onClose: this.hideEditNodeBox, little: true },
+          _react2.default.createElement(_modals.EditNodeBox, { currentWorkflow: this.props.currentWorkflow, loadUserWorkflows: this.props.loadUserWorkflows, node: this.state.nodeToEdit || null, hideEditNodeBox: this.hideEditNodeBox })
         )
       );
     }
@@ -41192,6 +41301,8 @@ var _jsCookie = __webpack_require__(13);
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -41264,8 +41375,6 @@ var CyContainer = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      console.log('componentWillReceiveProps ran in cyContainer');
-      console.log(nextProps.currentWorkflow);
       this.renderGraph(nextProps.currentWorkflow);
     }
   }, {
@@ -41278,7 +41387,6 @@ var CyContainer = function (_Component) {
     value: function renderGraph(graph) {
       var _this2 = this;
 
-      console.log('renderGraph ran');
       cy.destroy();
       cy = (0, _cytoscape2.default)(cyConfig);
       graph.nodes.forEach(function (node) {
@@ -41286,6 +41394,7 @@ var CyContainer = function (_Component) {
           data: {
             id: node.id,
             name: node.name,
+            description: node.description,
             inDegree: node.in_degree,
             outDegree: node.out_degree,
             deepest: graph.nodes.length,
@@ -41321,10 +41430,16 @@ var CyContainer = function (_Component) {
 
       cy.nodes().forEach(function (ele) {
         ele.qtip({
+          hide: {
+            event: 'click unfocus'
+          },
           content: function content() {
             var delBtn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             var editBtn = $('<button class="edit-button"><i class="far fa-edit"></i></button>');
+            editBtn.attr('id', ele.data('id'));
             delBtn.click(function () {
+              // ele.qtip('hide');
+              console.log(ele.qtip('hide'));
               (0, _axios2.default)({
                 method: 'post',
                 url: '/delete-node/',
@@ -41339,12 +41454,14 @@ var CyContainer = function (_Component) {
                 console.log(error);
               });
             });
-            editBtn.click(function () {
-              console.log('not implemented yet.');
+            editBtn.click(function (e) {
+              _this2.props.showEditNodeBox(e);
             });
             return [delBtn, editBtn];
+            console.log(delBtn);
           },
           title: ele.name,
+          text: ele.description,
           style: {
             classes: 'qtip-tipsy'
           },
@@ -41357,7 +41474,10 @@ var CyContainer = function (_Component) {
       });
 
       cy.edges().forEach(function (ele) {
-        ele.qtip({
+        ele.qtip(_defineProperty({
+          hide: {
+            event: 'click unfocus'
+          },
           content: function content() {
             var btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             btn.click(function () {
@@ -41385,7 +41505,9 @@ var CyContainer = function (_Component) {
             at: 'right center',
             target: ele
           }
-        });
+        }, 'hide', {
+          event: 'click unfocus'
+        }));
       });
 
       var eh = cy.edgehandles();
@@ -41401,7 +41523,6 @@ var CyContainer = function (_Component) {
             "Authorization": 'Token ' + localStorage.token
           }
         }).then(function (response) {
-          console.log('Edge should be created now. Calling loadUserWorkflows.');
           _this2.props.loadUserWorkflows(false);
         }).catch(function (error) {
           console.log(error);
