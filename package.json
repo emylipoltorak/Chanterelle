@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js --progresss --colors",
+    "build-production": "webpack --config webpack.prod.config.js --progress --colors",
+    "watch": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -45,6 +47,7 @@
     "react-responsive-modal": "^2.0.0",
     "react-router-dom": "^4.2.2",
     "react-spinners": "^0.2.6",
-    "react-transition-group": "^2.2.1"
+    "react-transition-group": "^2.2.1",
+    "uglify-js": "^3.3.12"
   }
 }

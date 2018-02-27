@@ -1,4 +1,4 @@
 {
   "presets": ["env", "react"],
-  "plugins": ["emotion"]
+  "plugins": ["emotion", "react-hot-loader/babel"]
 }
