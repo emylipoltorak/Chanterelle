@@ -15,8 +15,9 @@ cytoscape.use( dagre );
 cytoscape.use( edgehandles );
 
 let cy = {};
+var deepest;
 
-const cyConfig = {
+let cyConfig = {
   elements: [],
   style: [
     {
@@ -29,7 +30,7 @@ const cyConfig = {
         'font-size': '25px',
         'font-family': 'Nixie One, cursive',
         'shape': 'roundrectangle',
-        'background-color': 'mapData(inDegree, 1, 8, rgba(163, 154, 164), rgba(240, 146, 60))',
+        'background-color': 'mapData(inDegree, 1, 8, rgb(163, 154, 164), rgb(240, 146, 60))',
         'background-opacity': 'mapData(inDegree, 1, 8, .3, 1)',
         'border-color': 'transparent',
         'width': 'label',
@@ -57,6 +58,7 @@ export default class CyContainer extends Component {
   };
 
   componentDidMount () {
+    console.log(deepest || 10)
     cyConfig.container = this.refs.cy;
     cy = cytoscape(cyConfig);
     this.renderGraph(this.props.currentWorkflow);
@@ -71,8 +73,10 @@ export default class CyContainer extends Component {
   }
 
   renderGraph(graph) {
+    deepest = 12;
     cy.destroy();
     cy = cytoscape(cyConfig);
+    console.log(cyConfig);
     graph.nodes.forEach(node => {
       cy.add({
         data: {
@@ -81,9 +85,8 @@ export default class CyContainer extends Component {
           description: node.description,
           inDegree: node.in_degree,
           outDegree: node.out_degree,
-          deepest: graph.nodes.length,
           debugLabel: node.name + ': ' + node.in_degree
-        }
+        },
       })
     });
 

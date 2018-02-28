@@ -40,12 +40,10 @@ export default class LogIn extends Component {
       <form className='authForm' onSubmit={this.handleSubmit}>
         <h2>Log In</h2>
         <label>
-          Username:
-          <input type='text' name='userName' id='userName' onChange={this.handleNameChange} />
+          <input placeholder='Username' type='text' name='userName' id='userName' onChange={this.handleNameChange} />
         </label>
         <label>
-          Password:
-          <input type='password' name='pw' id='pw' onChange={this.handlePwChange}/>
+          <input placeholder='Password' type='password' name='pw' id='pw' onChange={this.handlePwChange}/>
         </label>
         <input type='submit' value='Submit'/>
       </form>
