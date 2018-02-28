@@ -180,6 +180,14 @@ button:selected {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    input[type='text'], input[type='password'] {
+      width: 60%;
+      height: 40px;
+      font-size: 30px;
+      font-family: $main-font;
+      color: rgba($dark-color, 0.8);
+      align-self: center;
+    }
     p {
       font-size: 15px;
       font-family: $main-font;
@@ -202,7 +210,6 @@ button:selected {
     background: $lightest;
     color: $accent;
   }
-
 }
 
 .add {

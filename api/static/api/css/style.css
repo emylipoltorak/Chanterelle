@@ -215,6 +215,14 @@ button:selected {
   align-items: center;
   width: 100%;
 }
+.authForm .formfield input[type='text'], .authForm .formfield input[type='password'] {
+  width: 60%;
+  height: 40px;
+  font-size: 30px;
+  font-family: "Nixie One", cursive;
+  color: rgba(44, 32, 41, 0.8);
+  align-self: center;
+}
 .authForm .formfield p {
   font-size: 15px;
   font-family: "Nixie One", cursive;
