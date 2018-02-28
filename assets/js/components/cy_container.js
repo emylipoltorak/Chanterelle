@@ -34,7 +34,7 @@ const cyConfig = {
         'border-color': 'transparent',
         'width': 'label',
         'height': 'label',
-        'padding': '7px'
+        'padding': '7px',
       }
     }, {
       selector: 'edge',
@@ -114,16 +114,12 @@ export default class CyContainer extends Component {
 
     cy.nodes().forEach(ele => {
         ele.qtip({
-          hide: {
-            event: 'click unfocus'
-          },
           content: () => {
             const delBtn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             const editBtn = $('<button class="edit-button"><i class="far fa-edit"></i></button>');
             editBtn.attr('id', ele.data('id'));
             delBtn.click(() => {
-              // ele.qtip('hide');
-              console.log(ele.qtip('hide'));
+              ele.qtip('api').destroy();
               axios({
                 method: 'post',
                 url: '/delete-node/',
@@ -140,6 +136,7 @@ export default class CyContainer extends Component {
               })
             });
             editBtn.click((e) => {
+              ele.qtip('api').destroy();
               this.props.showEditNodeBox(e);
             });
             return [delBtn, editBtn];
@@ -154,18 +151,16 @@ export default class CyContainer extends Component {
             my: 'bottom center',
             at: 'top center',
             target: ele
-          }
+          },
         });
       });
 
       cy.edges().forEach(ele => {
         ele.qtip({
-          hide: {
-            event: 'click unfocus'
-          },
           content: () => {
             const btn = $('<button class="delete-button"><i class="fas fa-trash"></i></button>');
             btn.click(() => {
+              ele.qtip('api').destroy();
               axios({
                 method: 'post',
                 url: '/delete-edge/',

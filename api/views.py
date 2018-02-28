@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import json
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
+from django.core.exceptions import ValidationError
 
 
 def home(request):
@@ -86,9 +87,12 @@ def add_edge(request):
         graph = DiGraph.objects.get(pk=data['graph'])
         parent = graph.nodes.get(pk=data['parent'])
         child = graph.nodes.get(pk=data['child'])
-        graph.add_edge(parent, child)
-        graph.save()
-        return JsonResponse({'message': 'success'})
+        try:
+            graph.add_edge(parent, child)
+            graph.save()
+            return JsonResponse({'message': 'success'})
+        except ValidationError:
+            return JsonResponse({'message': 'Circular dependency detected. Edge not created.'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
 @api_view(["POST"])
@@ -138,7 +142,7 @@ def delete_workflow(request):
         return JsonResponse({'message': 'deleted'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
-@api_view(["POST"])
+
 def register_user(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -149,6 +153,16 @@ def register_user(request):
         graph = DiGraph(name="{}'s Tasks".format(username), owner=user)
         graph.save()
         return JsonResponse({'message': 'success'})
+    return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
+
+def check_username(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        username = data['username']
+        if User.objects.get(username=username):
+            return JsonResponse({'available': 'false'})
+        else:
+            return JsonResponse({'available': 'true'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 
 @api_view(["POST"])

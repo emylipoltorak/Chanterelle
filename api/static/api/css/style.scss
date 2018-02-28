@@ -370,3 +370,11 @@ main h1 {
   align-content: center;
   justify-content: center;
 }
+
+.errors {
+  border: 1px solid rgba($contrast, 0.8);
+}
+
+.no-errors {
+  border: 1px solid rgba(green, 0.8);
+}
