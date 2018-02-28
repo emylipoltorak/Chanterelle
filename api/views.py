@@ -159,9 +159,10 @@ def check_username(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         username = data['username']
-        if User.objects.get(username=username):
+        try:
+            User.objects.get(username=username)
             return JsonResponse({'available': 'false'})
-        else:
+        except:
             return JsonResponse({'available': 'true'})
     return JsonResponse({status: status.HTTP_400_BAD_REQUEST})
 

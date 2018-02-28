@@ -28,7 +28,8 @@ urlpatterns = [
     path('register-user/', a_views.register_user),
     path('api/add-workflow/', a_views.add_workflow),
     path('api/edit-workflow/', a_views.edit_workflow),
-    path('api/delete-workflow', a_views.delete_workflow),
+    path('api/delete-workflow/', a_views.delete_workflow),
+    path('api/check-username/', a_views.check_username),
     path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
     path('logout/', a_views.logout_user),
 ]

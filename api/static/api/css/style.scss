@@ -146,7 +146,7 @@ button:selected {
   display: flex;
   flex-direction: column;
   margin: auto;
-  width: 60%;
+  width: 70%;
   height: 60%;
   justify-content: space-between;
   font-size: 0.6em;
@@ -165,17 +165,39 @@ button:selected {
     font-size: 30px;
     font-family: $main-font;
   }
-  input[type='text'], input[type='password'] {
-    width: 60%;
-  }
-  label {
+  .formfield {
     display: flex;
-    width: 100%;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    input[type='text'], input[type='password'] {
+      width: 60%;
+      height: 40px;
+      font-size: 30px;
+      font-family: $main-font;
+      color: rgba($dark-color, 0.8);
+    }
+    p {
+      font-size: 15px;
+      font-family: $main-font;
+      width: 30%;
+      padding: 5px;
+      .fa-check {
+        color: rgba(green, 0.8);
+        font-size: 30px;
+      }
+    }
+    p.error-message {
+      color: $contrast;
+    }
   }
   input[type='submit']:hover {
     @include animate-simple(background-color, 200ms, ease-in-out);
-    background: rgba($chanterelle, 0.9);
+    background: rgba($chanterelle, 0.8);
+  }
+  input[type='submit']:disabled {
+    background: $lightest;
+    color: $accent;
   }
 
 }
@@ -373,8 +395,10 @@ main h1 {
 
 .errors {
   border: 1px solid rgba($contrast, 0.8);
+  background: rgba($contrast, 0.2);
 }
 
-.no-errors {
+.validated {
   border: 1px solid rgba(green, 0.8);
+  background: rgba(green, 0.1);
 }

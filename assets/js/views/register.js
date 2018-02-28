@@ -85,33 +85,86 @@ export default class Register extends Component {
 
   handleBlur (e) {
     let field = '';
-    if (e.currentTarget.id === 'username') {
+    if (e.target.id === 'username') {
       field = 'username';
-    } else if (e.currentTarget.id === 'pw1') {
+      let input = document.querySelector('#username');
+      let errorMessages = document.querySelector('#username-errors')
+      axios({
+        method: 'post',
+        url: '/api/check-username/',
+        data: {username: this.state.username},
+        headers: {
+          "X-CSRFTOKEN": csrfToken,
+        }
+      }).then(response => {
+        console.log(response);
+        if (response.data.available == "false") {
+          errorMessages.innerText = 'Sorry, that username is unavailable.';
+          errorMessages.className = 'error-message'
+        } else if (response.data.available == 'true') {
+          console.log(this.state.username.length < 6);
+          if (this.state.username.length < 6) {
+            errorMessages.className = 'error-message'
+            errorMessages.innerText = 'Sorry, that username is too short.'
+          } else {
+            errorMessages.className = ''
+            errorMessages.innerHTML = '<i class="fas fa-check"></i>'
+            input.className += "validated"
+          }
+        }
+      }).catch(errors => {
+        console.log(errors)
+      });
+    } else if (e.target.id === 'pw1') {
       field = 'password1';
-    } else if (e.currentTarget.id === 'pw2') {
+      console.log(e.target.value);
+      let input = document.querySelector('#pw1');
+      let errorMessages = document.querySelector('#pw1-errors');
+      errorMessages.innerHTML = '';
+      let hasLower = new RegExp("^(?=.*[a-z])");
+      let hasUpper = new RegExp("^(?=.*[A-Z])");
+      let hasNumber = new RegExp("^(?=.*[0-9])");
+      let hasSpecial = new RegExp("^(?=.[!@#\$%\^&])");
+      const errors = validate(this.state.username, e.target.value, this.state.pw2);
+      if (errors['password1']) {
+        errorMessages.innerHTML = 'Errors: <br>';
+        errorMessages.className = 'error-message';
+        if (!hasLower.test(e.target.value)) {
+          errorMessages.innerHTML += 'At least one lowercase letter is required. <br>'
+        }
+        if (!hasUpper.test(e.target.value)) {
+          errorMessages.innerHTML += 'At least one uppercase letter is required. <br>'
+        }
+        if (!hasNumber.test(e.target.value)) {
+          errorMessages.innerHTML += 'At least one number is required. <br>'
+        }
+        if (!hasSpecial.test(e.target.value)) {
+          errorMessages.innerHTML += 'At least one special character (!@#$%^&) is required. <br>'
+        } if (e.target.value < 8) {
+          errorMessages.innerHTML += 'Minimum password length is 8. <br>'
+        }
+      } else {
+        errorMessages.className = '';
+        errorMessages.innerHTML = '<i class="fas fa-check"></i>';
+        input.className += "validated";
+      }
+
+    } else if (e.target.id === 'pw2') {
       field = 'password2';
+      let input = document.querySelector('#pw2');
+      let errorMessages = document.querySelector('#pw2-errors');
+      if (this.state.pw1 !== e.target.value) {
+        errorMessages.className = 'error-message';
+        errorMessages.innerText = "Passwords don't match."
+      } else {
+        errorMessages.className = '';
+        errorMessages.innerHTML = '<i class="fas fa-check"></i>';
+        input.className += "validated";
+      }
     }
     this.setState({
       touched: { [field]: true },
     });
-    // if (field == 'username') {
-    //   axios({
-    //     method: 'post',
-    //     url: '/check-username/',
-    //     data: {username: this.state.username},
-    //     headers: {
-    //       "X-CSRFTOKEN": csrfToken,
-    //     }
-    //   }).then(response => {
-    //     console.log(response);
-    //     if (!response.available) {
-    //       document.querySelector('#username-errors').innerText = 'Sorry, that username is unavailable.';
-    //     }
-    //   }).catch(errors => {
-    //     console.log(errors)
-    //   });
-    // };
   }
 
   render() {
@@ -125,21 +178,24 @@ export default class Register extends Component {
     return (
       <form className='authForm' onSubmit={this.handleSubmit}>
         <h2>Register</h2>
-        <label>
-          Username:
-          <input type='text' id='username' onChange={this.handleNameChange} className={shouldMarkError('username') ? 'errors': ''} onBlur={this.handleBlur} />
-          {/* <p id='username-errors'></p> */}
-        </label>
-        <label>
-          Password:
-          <input type='password' id='pw1' onChange={this.handlePwChange} className={shouldMarkError('password1') ? 'errors': ''} onBlur={this.handleBlur} />
-          {/* <p id='pw1-errors'></p> */}
-        </label>
-        <label>
-          Again:
-          <input type='password' id='pw2' onChange={this.handlePwChange} className={shouldMarkError('password2') ? 'errors': ''} onBlur={this.handleBlur} />
-          {/* <p id='pw2-errors'></p> */}
-        </label>
+        <div className='formfield'>
+          <input placeholder='Username' type='text' id='username'
+            onChange={this.handleNameChange}
+            className={shouldMarkError('username') ? 'errors': ''}
+            onBlur={this.handleBlur}
+           />
+          <p id='username-errors'>
+            Choose a unique username that is at least 6 characters long.
+          </p>
+        </div>
+        <div className='formfield'>
+          <input placeholder='Password' type='password' id='pw1' onChange={this.handlePwChange} className={shouldMarkError('password1') ? 'errors': ''} onBlur={this.handleBlur} />
+          <p id='pw1-errors'>Password should contain a capital letter, a lowercase letter, a number, and a special character.</p>
+        </div>
+        <div className='formfield'>
+          <input  placeholder='Password Again' type='password' id='pw2' onChange={this.handlePwChange} className={shouldMarkError('password2') ? 'errors': ''} onBlur={this.handleBlur} />
+          <p id='pw2-errors'>Passwords should match.</p>
+        </div>
         <input type='submit' value='Submit' disabled={isDisabled} />
       </form>
     );

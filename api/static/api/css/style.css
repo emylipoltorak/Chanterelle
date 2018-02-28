@@ -178,7 +178,7 @@ button:selected {
   display: flex;
   flex-direction: column;
   margin: auto;
-  width: 60%;
+  width: 70%;
   height: 60%;
   justify-content: space-between;
   font-size: 0.6em;
@@ -201,20 +201,42 @@ button:selected {
   font-size: 30px;
   font-family: "Nixie One", cursive;
 }
-.authForm input[type='text'], .authForm input[type='password'] {
-  width: 60%;
-}
-.authForm label {
+.authForm .formfield {
   display: flex;
-  width: 100%;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.authForm .formfield input[type='text'], .authForm .formfield input[type='password'] {
+  width: 60%;
+  height: 40px;
+  font-size: 30px;
+  font-family: "Nixie One", cursive;
+  color: rgba(44, 32, 41, 0.8);
+}
+.authForm .formfield p {
+  font-size: 15px;
+  font-family: "Nixie One", cursive;
+  width: 30%;
+  padding: 5px;
+}
+.authForm .formfield p .fa-check {
+  color: rgba(0, 128, 0, 0.8);
+  font-size: 30px;
+}
+.authForm .formfield p.error-message {
+  color: #E04627;
 }
 .authForm input[type='submit']:hover {
   -webkit-transition: background-color 200ms ease-in-out;
   -moz-transition: background-color 200ms ease-in-out;
   -o-transition: background-color 200ms ease-in-out;
   transition: background-color 200ms ease-in-out;
-  background: rgba(240, 146, 60, 0.9);
+  background: rgba(240, 146, 60, 0.8);
+}
+.authForm input[type='submit']:disabled {
+  background: #F4F8F6;
+  color: #A299A4;
 }
 
 .add {
@@ -432,8 +454,10 @@ main h1 {
 
 .errors {
   border: 1px solid rgba(224, 70, 39, 0.8);
+  background: rgba(224, 70, 39, 0.2);
 }
 
-.no-errors {
+.validated {
   border: 1px solid rgba(0, 128, 0, 0.8);
+  background: rgba(0, 128, 0, 0.1);
 }
