@@ -7,4 +7,4 @@ db.sqlite3
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-./Chanterelle/local_settings.py
+Chanterelle/local_settings.py
