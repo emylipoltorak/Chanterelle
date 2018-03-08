@@ -21,18 +21,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+try:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+except NameError:
+    from .local_settings import LOCAL_KEY
+    SECRET_KEY = LOCAL_KEY
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
 ]
-
-if not DEBUG:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-else:
-    from .local_settings import LOCAL_KEY
-    SECRET_KEY = LOCAL_KEY
 
 # Application definition
 
