@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import auth from '../auth';
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 const csrfToken = Cookies.get('csrftoken');
 
@@ -71,9 +72,10 @@ export default class Register extends Component {
           if (loggedIn) {
             updateLogIn();
             updateUsername(username);
+          } else {
+            this.setState({username: '', pw1: '', pw2: ''});
           }
         });
-        this.setState({username: '', pw1: '', pw2: ''});
       }).catch(e => {
         console.log(e);
       })
@@ -97,12 +99,10 @@ export default class Register extends Component {
           "X-CSRFTOKEN": csrfToken,
         }
       }).then(response => {
-        console.log(response);
         if (response.data.available == "false") {
           errorMessages.innerText = 'Sorry, that username is unavailable.';
           errorMessages.className = 'error-message'
         } else if (response.data.available == 'true') {
-          console.log(this.state.username.length < 6);
           if (this.state.username.length < 6) {
             errorMessages.className = 'error-message'
             errorMessages.innerText = 'Sorry, that username is too short.'
@@ -117,7 +117,6 @@ export default class Register extends Component {
       });
     } else if (e.target.id === 'pw1') {
       field = 'password1';
-      console.log(e.target.value);
       let input = document.querySelector('#pw1');
       let errorMessages = document.querySelector('#pw1-errors');
       errorMessages.innerHTML = '';
@@ -174,6 +173,11 @@ export default class Register extends Component {
     const shouldMarkError = (field) => {
       return errors[field] && this.state.touched[field];
     };
+
+    if (this.state.toHome === true) {
+      console.log('redirecting...')
+      return <Redirect to='/' />
+    }
 
     return (
       <form className='authForm' onSubmit={this.handleSubmit}>

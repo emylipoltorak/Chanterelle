@@ -67,6 +67,8 @@ export default class App extends Component {
 
     initial = initial || false;
 
+    console.log(this.state);
+
     if (this.state.isLoggedIn) {
       axios({
         method: 'post',

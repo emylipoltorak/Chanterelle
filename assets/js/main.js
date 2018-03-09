@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import NextList from './views/next-list';
 import LogIn from './views/login';
 import Register from './views/register';
@@ -22,8 +22,8 @@ class Main extends Component {
         <Switch>
           <Route exact path='/' render={(defaultProps) => this.props.isLoggedIn ? <NextList {...this.props} {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
           <Route path='/graph' render={(defaultProps) => this.props.isLoggedIn ? <Graph {...this.props}  {...defaultProps} /> : <LogIn {...this.props} {...defaultProps} /> } />
-          <Route path='/login' render={(defaultProps) => !this.props.isLoggedIn ? <LogIn {...this.props} {...defaultProps} /> : <h1>Logged in as {this.props.username}</h1>} />
-          <Route path='/register' render={(defaultProps) => !this.props.isLoggedIn ? <Register {...this.props} {...defaultProps} /> : <h1>Logged in as {this.props.username}</h1>} />
+          <Route path='/login' render={(defaultProps) => !this.props.isLoggedIn ? <LogIn {...this.props} {...defaultProps} /> : <Redirect to='/' />} />
+          <Route path='/register' render={(defaultProps) => !this.props.isLoggedIn ? <Register {...this.props} {...defaultProps} /> : <Redirect to='/' /> } />
         </Switch>
       </main>
     )
