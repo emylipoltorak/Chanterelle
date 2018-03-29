@@ -87,7 +87,7 @@ class Navbar extends Component {
     console.log('delete button clicked');
     axios({
       method: 'POST',
-      url: '/api/delete-workflow',
+      url: '/api/delete-workflow/',
       data: {workflow: e.currentTarget.id},
       headers: {
         "X-CSRFTOKEN": csrfToken,

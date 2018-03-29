@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 const csrfToken = Cookies.get('csrftoken');
 
 function validate(username, password1, password2) {
-  const strongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})");
+  const strongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})");
   return {
     username: !(username.length >= 6),
     password1: !(strongPassword.test(password1)),
@@ -72,6 +72,7 @@ export default class Register extends Component {
           if (loggedIn) {
             updateLogIn();
             updateUsername(username);
+            this.props.loadUserWorkflows(true);
           } else {
             this.setState({username: '', pw1: '', pw2: ''});
           }
@@ -123,23 +124,19 @@ export default class Register extends Component {
       let hasLower = new RegExp("^(?=.*[a-z])");
       let hasUpper = new RegExp("^(?=.*[A-Z])");
       let hasNumber = new RegExp("^(?=.*[0-9])");
-      let hasSpecial = new RegExp("^(?=.[!@#\$%\^&])");
       const errors = validate(this.state.username, e.target.value, this.state.pw2);
       if (errors['password1']) {
         errorMessages.innerHTML = 'Errors: <br>';
         errorMessages.className = 'error-message';
         if (!hasLower.test(e.target.value)) {
-          errorMessages.innerHTML += 'At least one lowercase letter is required. <br>'
+          errorMessages.innerHTML += 'Lowercase letter is required. <br>'
         }
         if (!hasUpper.test(e.target.value)) {
-          errorMessages.innerHTML += 'At least one uppercase letter is required. <br>'
+          errorMessages.innerHTML += 'Uppercase letter is required. <br>'
         }
         if (!hasNumber.test(e.target.value)) {
-          errorMessages.innerHTML += 'At least one number is required. <br>'
-        }
-        if (!hasSpecial.test(e.target.value)) {
-          errorMessages.innerHTML += 'At least one special character (!@#$%^&) is required. <br>'
-        } if (e.target.value < 8) {
+          errorMessages.innerHTML += 'Number is required. <br>'
+        } if (e.target.value.length < 8) {
           errorMessages.innerHTML += 'Minimum password length is 8. <br>'
         }
       } else {
@@ -194,7 +191,7 @@ export default class Register extends Component {
         </div>
         <div className='formfield'>
           <input placeholder='Password' type='password' id='pw1' onChange={this.handlePwChange} className={shouldMarkError('password1') ? 'errors': ''} onBlur={this.handleBlur} />
-          <p id='pw1-errors'>Password should contain a capital letter, a lowercase letter, a number, and a special character.</p>
+          <p id='pw1-errors'>Password should contain a capital letter, a lowercase letter, and a number.</p>
         </div>
         <div className='formfield'>
           <input  placeholder='Password Again' type='password' id='pw2' onChange={this.handlePwChange} className={shouldMarkError('password2') ? 'errors': ''} onBlur={this.handleBlur} />

@@ -98,6 +98,7 @@ class EditWorkflowBox extends Component {
   }
 
   render () {
+    console.log(this.props.workflow);
     return (
       <form className='modal' onSubmit={this.handleSubmit}>
         <h1>{`{Editing: ${this.props.workflow.name}}`}</h1>
@@ -145,7 +146,6 @@ class AddWorkflowBox extends Component {
       }
     })
       .then(response => {
-        console.log(response);
         this.setState({ name: '', description: '' })
         this.props.loadUserWorkflows(false);
         this.props.hideAddModal();
@@ -175,7 +175,7 @@ class AddWorkflowBox extends Component {
 class EditNodeBox extends Component {
   constructor (props) {
     super (props);
-    this.state = { name: '', description: '' }
+    this.state = { name: this.props.node.name, description: this.props.node.description || '' }
 
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -210,7 +210,7 @@ class EditNodeBox extends Component {
   }
 
   render () {
-    console.log(this.props.node);
+    console.log(this.state.name);
     return (
       <form className='modal' onSubmit={this.handleSubmit}>
         <h1>{`{Editing: ${this.props.node.name}}`}</h1>

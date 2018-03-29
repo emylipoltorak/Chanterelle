@@ -67,8 +67,6 @@ export default class App extends Component {
 
     initial = initial || false;
 
-    console.log(this.state);
-
     if (this.state.isLoggedIn) {
       axios({
         method: 'post',
@@ -93,11 +91,12 @@ export default class App extends Component {
 
   checkLogIn() {
     // update state to reflect the current login status.
-
+    console.log('checkLogIn ran in app');
     this.setState({isLoggedIn: auth.loggedIn()});
   }
 
   updateUsername(username) {
+    console.log('updateUsername ran in app');
     this.setState({username: username});
   }
 
@@ -116,7 +115,6 @@ export default class App extends Component {
 
   showAddModal () {
     this.setState({ addOpen: true });
-    console.log('showModal was clicked.');
   }
 
   hideAddModal () {
@@ -126,7 +124,6 @@ export default class App extends Component {
   showEditModal (e) {
     this.setState({ editOpen: true });
     this.setState({workflowToEdit: this.state.workflows.find(obj => {return obj.id == e.currentTarget.id})});
-    console.log(e.currentTarget.id);
   }
 
   hideEditModal () {

@@ -33,13 +33,25 @@ export default class Graph extends Component {
   render () {
     return (
       <main className='graph'>
-        <CyContainer currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} showEditNodeBox={this.showEditNodeBox} />
+        <CyContainer
+          currentWorkflow={this.props.currentWorkflow}
+          loadUserWorkflows={this.props.loadUserWorkflows}
+          showEditNodeBox={this.showEditNodeBox}
+        />
         <button className='add' onClick={this.showAddNodeBox}>Add a Task</button>
         <CustomAnimation open={this.state.addNodeOpen} onClose={this.hideAddNodeBox} little>
-          <AddNodeBox currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} />
+          <AddNodeBox
+            currentWorkflow={this.props.currentWorkflow}
+            loadUserWorkflows={this.props.loadUserWorkflows}
+           />
         </CustomAnimation>
         <CustomAnimation open={this.state.editNodeOpen} onClose={this.hideEditNodeBox} little>
-          <EditNodeBox currentWorkflow={this.props.currentWorkflow} loadUserWorkflows={this.props.loadUserWorkflows} node={this.state.nodeToEdit || null} hideEditNodeBox={this.hideEditNodeBox} />
+          <EditNodeBox
+            currentWorkflow={this.props.currentWorkflow}
+            loadUserWorkflows={this.props.loadUserWorkflows}
+            node={this.state.nodeToEdit || null}
+            hideEditNodeBox={this.hideEditNodeBox}
+          />
         </CustomAnimation>
       </main>
     )};

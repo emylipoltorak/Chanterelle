@@ -27,6 +27,9 @@ except:
     from .local_settings import LOCAL_KEY
     SECRET_KEY = LOCAL_KEY
 
+# from .local_settings import LOCAL_KEY
+# SECRET_KEY = LOCAL_KEY
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

@@ -58,7 +58,6 @@ export default class CyContainer extends Component {
   };
 
   componentDidMount () {
-    console.log(deepest || 10)
     cyConfig.container = this.refs.cy;
     cy = cytoscape(cyConfig);
     this.renderGraph(this.props.currentWorkflow);
@@ -76,7 +75,6 @@ export default class CyContainer extends Component {
     deepest = 12;
     cy.destroy();
     cy = cytoscape(cyConfig);
-    console.log(cyConfig);
     graph.nodes.forEach(node => {
       cy.add({
         data: {
@@ -143,7 +141,6 @@ export default class CyContainer extends Component {
               this.props.showEditNodeBox(e);
             });
             return [delBtn, editBtn];
-            console.log(delBtn);
           },
           title: ele.name,
           text: ele.description,
