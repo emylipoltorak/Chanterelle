@@ -95,8 +95,10 @@ main {
 }
 
 .dd-menu {
-  grid-area: nav;
   background: transparent;
+}
+.dd-menu .dd-menu-items {
+  width: auto !important;
 }
 .dd-menu li {
   color: #2C2029;
@@ -147,8 +149,8 @@ main {
   color: #2C2029 !important;
 }
 
-.fa-code-branch {
-  font-size: 5em;
+.fa-bars {
+  font-size: 4em;
   padding: 30px;
   color: #F0923C;
 }
@@ -450,7 +452,7 @@ main ul li:hover .fa-times-circle {
   color: #2C2029;
 }
 
-main .graph {
+main .graph, main .next {
   display: flex;
   flex-direction: column;
 }
@@ -469,4 +471,19 @@ main h1 {
 .validated {
   border: 1px solid rgba(0, 128, 0, 0.8);
   background: rgba(0, 128, 0, 0.1);
+}
+
+.tutorial {
+  font-size: 0.6em;
+}
+.tutorial p {
+  padding: 0 10%;
+}
+.tutorial p .chantcolor {
+  color: #F0923C;
+  font-weight: bold;
+}
+.tutorial p .contrastcolor {
+  color: #E04627;
+  font-weight: bold;
 }

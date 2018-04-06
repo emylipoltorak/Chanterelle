@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Link, Switch, Redirect, withRouter } from 'react-router-dom';
 import DropdownMenu, { NestedDropdownMenu } from 'react-dd-menu';
 import auth from '../auth';
 import Cookies from 'js-cookie';
@@ -9,17 +9,25 @@ const csrfToken = Cookies.get('csrftoken');
 
 // small, reusable UI components.
 
-class Header extends Component {
+const Header = withRouter(props => <ChanterelleHeader {...props}/>);
+
+
+class ChanterelleHeader extends Component {
   constructor (props) {
     super(props);
   }
 
   render () {
+    console.log(this.props.location.pathname)
     if (this.props.currentWorkflow.name) {
       return (
         <header>
           <h1>Chanter<span>elle</span></h1>
+          {
+            this.props.location.pathname == '/tutorial/' ?
+          <h2>{`{Tutorial}`}</h2> :
           <h2>{`{${this.props.currentWorkflow.name}}`}</h2>
+        }
         </header>
       )
     }
@@ -100,54 +108,55 @@ class Navbar extends Component {
     });
   }
 
-render() {
-  const menuOptions = {
-    isOpen: this.state.isMenuOpen,
-    close: this.close,
-    toggle: <span onClick={this.toggle}><i className="fas fa-code-branch fa-rotate-180"></i></span>,
-    align: 'left',
-    size: 'sm',
-  };
+  render() {
+    const menuOptions = {
+      isOpen: this.state.isMenuOpen,
+      close: this.close,
+      toggle: <span onClick={this.toggle}><i className="fas fa-bars"></i></span>,
+      align: 'left',
+      size: 'sm',
+    };
 
-  const nestedProps = {
-    toggle: <button id='workflows'>Workflows</button>,
-    animate: true,
-    nested: 'reverse',
-  }
+    const nestedProps = {
+      toggle: <button id='workflows'>Workflows</button>,
+      animate: true,
+      nested: 'reverse',
+    }
 
-    return (
-      <DropdownMenu {...menuOptions}>
-        <NestedDropdownMenu {...nestedProps}>
-          {
-            this.props.workflows[0] ?
-            <ul>
-              {/* <li><span onClick={this.handleWorkflowSelect}>{this.props.workflows[0]}</span></li> */}
-              <li>
-                <span id={this.props.workflows[0].id} onClick={this.handleWorkflowSelect}>{this.props.workflows[0].name}</span>
-                <div className='edit-delete'>
-                  <span id={this.props.workflows[0].id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
-                </div>
-              </li>
-              {this.props.workflows.slice(1).map(workflow => {
-                return <li key={workflow.id}>
-                    <span id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</span>
-                    <div className='edit-delete'>
-                      <span id={workflow.id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
-                      <span id={workflow.id} onClick={this.deleteWorkflow}><i className="fas fa-trash" /></span>
+      return (
+        <DropdownMenu {...menuOptions}>
+          <NestedDropdownMenu {...nestedProps}>
+            {
+              this.props.workflows[0] ?
+              <ul>
+                {/* <li><span onClick={this.handleWorkflowSelect}>{this.props.workflows[0]}</span></li> */}
+                <li>
+                  <span id={this.props.workflows[0].id} onClick={this.handleWorkflowSelect}>{this.props.workflows[0].name}</span>
+                  <div className='edit-delete'>
+                    <span id={this.props.workflows[0].id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
                   </div>
                 </li>
-              }
-            )}
-            <li onClick={this.props.showAddModal}><button>+ New Workflow</button></li>
-            </ul> : null
-          }
-        </NestedDropdownMenu>
-        <li role='separator' className='separator' />
-        <li><Link to='/'>Next</Link></li>
-        <li><Link to='/graph'>Graph</Link></li>
-      </DropdownMenu>
-    );
-  }
+                {this.props.workflows.slice(1).map(workflow => {
+                  return <li key={workflow.id}>
+                      <span id={workflow.id} onClick={this.handleWorkflowSelect}>{workflow.name}</span>
+                      <div className='edit-delete'>
+                        <span id={workflow.id} onClick={this.props.showEditModal}><i className="far fa-edit" /></span>
+                        <span id={workflow.id} onClick={this.deleteWorkflow}><i className="fas fa-trash" /></span>
+                    </div>
+                  </li>
+                }
+              )}
+              <li onClick={this.props.showAddModal}><button>+ New Workflow</button></li>
+              </ul> : null
+            }
+          </NestedDropdownMenu>
+          <li role='separator' className='separator' />
+          <li><Link to='/'>Available Tasks</Link></li>
+          <li><Link to='/graph'>Dependency Graph</Link></li>
+          <li><Link to='/tutorial'>Tutorial</Link></li>
+        </DropdownMenu>
+      );
+    }
 };
 
 const LogInButton = () => {

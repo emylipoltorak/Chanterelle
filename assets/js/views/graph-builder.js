@@ -22,8 +22,10 @@ export default class Graph extends Component {
   }
 
   showEditNodeBox (e) {
-    this.setState({ editNodeOpen: true });
-    this.setState({nodeToEdit: this.props.currentWorkflow.nodes.find(obj => {return obj.id == e.currentTarget.id})});
+    this.setState({
+      editNodeOpen: true,
+      nodeToEdit: this.props.currentWorkflow.nodes.find(obj => {return obj.id == e.currentTarget.id})
+    });
   }
 
   hideEditNodeBox () {
@@ -49,7 +51,7 @@ export default class Graph extends Component {
           <EditNodeBox
             currentWorkflow={this.props.currentWorkflow}
             loadUserWorkflows={this.props.loadUserWorkflows}
-            node={this.state.nodeToEdit || null}
+            node={this.state.nodeToEdit}
             hideEditNodeBox={this.hideEditNodeBox}
           />
         </CustomAnimation>

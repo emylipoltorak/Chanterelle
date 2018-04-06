@@ -72,9 +72,9 @@ main {
 }
 
 .dd-menu {
-  grid-area: nav;
   background: transparent;
   .dd-menu-items {
+    width: auto !important;
   }
   li {
     span {
@@ -122,8 +122,8 @@ main {
   }
 }
 
-.fa-code-branch {
-  font-size: 5em;
+.fa-bars {
+  font-size: 4em;
   padding: 30px;
   color: $chanterelle;
 }
@@ -393,7 +393,7 @@ main ul {
     }
   }
 }
-main .graph {
+main .graph, main .next {
   display: flex;
   flex-direction: column;
 }
@@ -411,4 +411,22 @@ main h1 {
 .validated {
   border: 1px solid rgba(green, 0.8);
   background: rgba(green, 0.1);
+}
+
+.tutorial {
+  font-size: 0.6em;
+
+  p {
+    padding: 0 10%;
+
+    .chantcolor {
+      color: $chanterelle;
+      font-weight: bold;
+    }
+
+    .contrastcolor {
+      color: $contrast;
+      font-weight: bold;
+    }
+  }
 }

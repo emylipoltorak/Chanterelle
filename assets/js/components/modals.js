@@ -103,11 +103,11 @@ class EditWorkflowBox extends Component {
       <form className='modal' onSubmit={this.handleSubmit}>
         <h1>{`{Editing: ${this.props.workflow.name}}`}</h1>
         <label id='name'>
-          New Name:
+          Name:
           <input type='text' value={this.state.name} onChange={this.handleNameChange} />
         </label>
         <label>
-          New Description:
+          Description:
           <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
         </label>
         <button type='submit' value='Submit'>Save</button>
@@ -210,21 +210,21 @@ class EditNodeBox extends Component {
   }
 
   render () {
-    console.log(this.state.name);
-    return (
-      <form className='modal' onSubmit={this.handleSubmit}>
-        <h1>{`{Editing: ${this.props.node.name}}`}</h1>
-        <label id='name'>
-          New Name:
-          <input type='text' value={this.state.name} onChange={this.handleNameChange} />
-        </label>
-        <label>
-          New Description:
-          <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
-        </label>
-        <button type='submit' value='Submit'>Save</button>
-      </form>
-    )
+      console.log(this.state);
+      return (
+        <form className='modal' onSubmit={this.handleSubmit}>
+          <h1>{`{Editing: ${this.props.node.name}}`}</h1>
+          <label id='name'>
+            Name:
+            <input type='text' value={this.state.name} onChange={this.handleNameChange} />
+          </label>
+          <label>
+            Description:
+            <textarea value={this.state.description} onChange={this.handleDescriptionChange} />
+          </label>
+          <button type='submit' value='Submit'>Save</button>
+        </form>
+      )
   }
 }
 

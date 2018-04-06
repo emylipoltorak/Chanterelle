@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskNode
-        fields = ('name', 'id', 'in_degree', 'out_degree')
+        fields = ('name', 'id', 'in_degree', 'out_degree', 'description')
 
 
 class EdgeSerializer(serializers.ModelSerializer):
