@@ -1,4 +1,4 @@
- from django.shortcuts import render
+from django.shortcuts import render
 from api.models import DiGraph, Ta skNode
 from api.serializers import DiGraphSerializer, UserSerializer
 from rest_framework.views import APIView
